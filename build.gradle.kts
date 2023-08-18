@@ -1,12 +1,11 @@
 plugins {
     `java-library`
     `maven-publish`
-    kotlin("jvm") version "1.6.10"
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
 
 }
 
-group = "me.qingshou.taboolib"
+group = "io.izzel.taboolib"
 version = "1.0.0"
 val taboolibVersion = "6.0.12-13"
 repositories {
@@ -16,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation ("cn.hutool:hutool-all:5.8.20")
+    compileOnly("cn.hutool:hutool-all:5.8.20")
     compileOnly("com.alibaba.fastjson2:fastjson2:2.0.35")
     compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.39")
 
@@ -27,12 +26,28 @@ dependencies {
     compileOnly(fileTree("libs"))
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-Xjvm-default=all")
+    }
+}
+
+configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "$group"
-
+            version = taboolibVersion
             from(components["java"])
         }
     }
