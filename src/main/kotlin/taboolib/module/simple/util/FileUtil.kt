@@ -15,39 +15,36 @@ object FileUtil : FileUtil() {
      * @param file       文件
      * @param jsonObject JSONObject
      */
-    fun writerJSONObject(file: File?, jsonObject: JSONObject) {
-        val writer = FileWriter(file)
+    fun File.writerJSONObject(jsonObject: JSONObject) {
+        val writer = FileWriter(this)
         writer.write(jsonObject.toJSONString(JSONWriter.Feature.PrettyFormat))
     }
 
     /**
      * JSONArray写入文件
      *
-     * @param file      文件
      * @param jsonArray JSONArray
      */
-    fun writerJSONArray(file: File?, jsonArray: JSONArray) {
-        val writer = FileWriter(file)
+    fun File.writerJSONArray( jsonArray: JSONArray) {
+        val writer = FileWriter(this)
         writer.write(jsonArray.toJSONString(JSONWriter.Feature.PrettyFormat))
     }
 
     /**
      * 从文件读取JSONObject
      *
-     * @param file 文件
      */
-    fun readJSONObject(file: File?): JSONObject {
-        val fileReader = FileReader(file)
+    fun File.readJSONObject(): JSONObject {
+        val fileReader = FileReader(this)
         return JSONObject.parseObject(fileReader.readString())
     }
 
     /**
      * 从文件读取JSONArray
      *
-     * @param file 文件
      */
-    fun readJSONArray(file: File?): JSONArray {
-        val fileReader = FileReader(file)
+    fun File.readJSONArray(): JSONArray {
+        val fileReader = FileReader(this)
         return JSONArray.parseArray(fileReader.readString())
     }
 }

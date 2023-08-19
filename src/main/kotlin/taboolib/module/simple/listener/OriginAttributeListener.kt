@@ -5,6 +5,7 @@ import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
 import ac.github.oa.internal.core.attribute.AttributeData
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.simple.event.AttributeUpdateEvent
@@ -16,6 +17,7 @@ object OriginAttributeListener {
      *
      * @param event OA实体属性生效
      */
+    @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onEntityLoadEquipmentEvent(event: EntityLoadEquipmentEvent) {
         if (event.livingEntity !is Player) {

@@ -6,8 +6,7 @@ plugins {
 }
 
 group = "io.izzel.taboolib"
-version = "1.0.0"
-val taboolibVersion = "6.0.12-13"
+version = "6.0.12-13"
 repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/repository/public")
@@ -19,10 +18,10 @@ dependencies {
     compileOnly("com.alibaba.fastjson2:fastjson2:2.0.35")
     compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.39")
 
-    compileOnly("io.izzel.taboolib:common:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-configuration:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:platform-bukkit:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:common:$version")
+    compileOnly("io.izzel.taboolib:module-chat:$version")
+    compileOnly("io.izzel.taboolib:module-configuration:$version")
+    compileOnly("io.izzel.taboolib:platform-bukkit:$version")
     compileOnly(fileTree("libs"))
 }
 
@@ -47,7 +46,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "$group"
-            version = taboolibVersion
+            version = version
             from(components["java"])
         }
     }

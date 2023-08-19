@@ -6,6 +6,7 @@ import com.mchim.ItemLoreOrigin.Event.ItemLoreTickEvent
 import com.mchim.ItemLoreOrigin.ItemLoreData.ItemLoreManager
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.simple.event.AttributeUpdateEvent
@@ -17,10 +18,11 @@ object ItemLoreTickListener {
      *
      * @param event ILO的玩家查看Stats事件
      */
+    @Ghost
     @EventHandler
     fun onItemLoreStatusEvent(event: ItemLoreStatusEvent) {
         val player: Player = event.entity
-        val managers: MutableList<ItemLoreManager?> = event.getManager()
+        val managers: MutableList<ItemLoreManager> = event.getManager()
         updateAttribute(player, managers)
     }
 
@@ -29,13 +31,14 @@ object ItemLoreTickListener {
      *
      * @param event ILO的使用Item攻击事件
      */
+    @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onItemLoreDamageEvent(event: ItemLoreDamageEvent) {
         if (event.entity !is Player) {
             return
         }
         val player = event.entity as Player
-        val managers: MutableList<ItemLoreManager?> = event.damagerManager
+        val managers: MutableList<ItemLoreManager> = event.damagerManager
         updateAttribute(player, managers)
     }
 
@@ -44,10 +47,11 @@ object ItemLoreTickListener {
      *
      * @param event ILO的Tick事件,触发频率: 一秒一次
      */
+    @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onItemLoreTickEvent(event: ItemLoreTickEvent) {
         val player: Player = event.entity
-        val managers: MutableList<ItemLoreManager?> = event.manager
+        val managers: MutableList<ItemLoreManager> = event.manager
         updateAttribute(player, managers)
     }
 
@@ -57,7 +61,7 @@ object ItemLoreTickListener {
      * @param player   玩家
      * @param managers 属性管理
      */
-    private fun updateAttribute(player: Player, managers: MutableList<ItemLoreManager?>?) {
+    private fun updateAttribute(player: Player, managers: MutableList<ItemLoreManager>?) {
         if (managers == null) {
             return
         }

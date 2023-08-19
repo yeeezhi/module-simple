@@ -3,6 +3,7 @@ package taboolib.module.simple.listener
 import github.saukiya.sxattribute.SXAttribute
 import github.saukiya.sxattribute.event.SXLoadItemDataEvent
 import org.bukkit.entity.Player
+import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.simple.event.AttributeUpdateEvent
@@ -14,6 +15,7 @@ object SXAttributeListener {
      *
      * @param event SX的物品载入属性事件
      */
+    @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onSXLoadItemDataEvent(event: SXLoadItemDataEvent) {
         if (event.entity !is Player) {

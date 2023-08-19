@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.serverct.ersha.api.AttributeAPI
 import org.serverct.ersha.api.event.AttrUpdateAttributeEvent
+import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.simple.event.AttributeUpdateEvent
@@ -15,6 +16,7 @@ object AttributePlus3Listener {
      *
      * @param event AP玩家属性更新事件
      */
+    @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onAttrUpdateAttributeEvent(event: AttrUpdateAttributeEvent.After) {
         val entity: Entity = event.attributeData.getEntity() as? Player ?: return

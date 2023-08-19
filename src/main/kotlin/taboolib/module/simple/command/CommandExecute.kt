@@ -52,6 +52,7 @@ class CommandExecute(name: String) : Command(name) {
             }
             invokeMethod.setAccessible(true)
             invokeMethod.invoke(subCommand)
+            println(invokeMethod.typeParameters.size)
         } catch (var11: Exception) {
             throw RuntimeException(var11)
         }
