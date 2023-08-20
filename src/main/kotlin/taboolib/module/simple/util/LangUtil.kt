@@ -8,8 +8,8 @@ import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 
 object LangUtil {
-    @Config("config.yml")
-    lateinit var config: Configuration
+    @Config("message.yml", autoReload = true)
+    lateinit var message: Configuration
         private set
 
     /**
@@ -62,8 +62,8 @@ object LangUtil {
      */
     @JvmStatic
     fun getLang(key: String): String {
-        return (config.getString("message.prefix") + config.getString(
-            key, "§a请按照最新配置文件确保无误"
+        return (message.getString("prefix") + message.getString(
+            key, key
         )).colored()
     }
 
@@ -76,8 +76,8 @@ object LangUtil {
     @JvmStatic
     fun getLang(key: String, vararg args: Any): String {
         return format(
-            (config.getString("prefix") + config.getString(
-                key, "§a请按照最新配置文件确保无误"
+            (message.getString("prefix") + message.getString(
+                key, key
             )).colored(), *args
         )
     }
