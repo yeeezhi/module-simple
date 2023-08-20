@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="打包+本地仓库" type="CompoundRunConfigurationType">
+    <toRun name="module-simple [build]" type="ShConfigurationType" />
+    <toRun name="module-simple [本地仓库]" type="ShConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
