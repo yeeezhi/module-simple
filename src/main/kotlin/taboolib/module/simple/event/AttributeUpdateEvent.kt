@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.module.simple.util.ItemUtil
+import taboolib.module.simple.util.ItemUtil.getLore
 import taboolib.platform.type.BukkitProxyEvent
 import java.util.function.Consumer
 
@@ -145,13 +146,7 @@ class AttributeUpdateEvent(private val player: Player) : BukkitProxyEvent() {
          */
         get() {
             val lore_list: MutableList<String> = ArrayList()
-            playerItemStacks.forEach(Consumer { itemStack: ItemStack ->
-                lore_list.addAll(
-                    ItemUtil.getLore(
-                        itemStack.clone()
-                    )
-                )
-            })
+            playerItemStacks.forEach(Consumer { itemStack: ItemStack -> lore_list.addAll(itemStack.clone().getLore()) })
             return lore_list
         }
 

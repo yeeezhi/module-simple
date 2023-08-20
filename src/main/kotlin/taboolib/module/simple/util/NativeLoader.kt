@@ -1,6 +1,8 @@
 package taboolib.module.simple.util
 
-import taboolib.common.platform.function.warning
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
+import taboolib.common.platform.function.info
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -13,6 +15,7 @@ object NativeLoader {
     /**
      * Handles native-loading for the finished jars
      */
+    @Awake(LifeCycle.LOAD)
     fun loadNatives() {
         synchronized(NATIVE_LOADER_LOCK) {
             if (NATIVES_LOADED) return
@@ -37,7 +40,7 @@ object NativeLoader {
             try {
                 NativeLoader::class.java.getResourceAsStream("/META-INF/natives/$name").use { inputStream ->
                     if (inputStream == null) {
-                        warning("动态链路库 $name 不存在")
+                        info("Failed to load natives $name")
                         return
                     }
                     FileOutputStream(tmpFile).use { fos ->

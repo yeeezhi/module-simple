@@ -12,7 +12,6 @@ object FileUtil : FileUtil() {
     /**
      * JSONObject写入文件
      *
-     * @param file       文件
      * @param jsonObject JSONObject
      */
     fun File.writerJSONObject(jsonObject: JSONObject) {
@@ -25,7 +24,7 @@ object FileUtil : FileUtil() {
      *
      * @param jsonArray JSONArray
      */
-    fun File.writerJSONArray( jsonArray: JSONArray) {
+    fun File.writerJSONArray(jsonArray: JSONArray) {
         val writer = FileWriter(this)
         writer.write(jsonArray.toJSONString(JSONWriter.Feature.PrettyFormat))
     }

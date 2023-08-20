@@ -1,8 +1,10 @@
 package taboolib.module.simple.util
 
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.simple.util.ItemUtil.equalsItem
 import taboolib.module.simple.util.ItemUtil.isItemStack
 
@@ -10,6 +12,56 @@ import taboolib.module.simple.util.ItemUtil.isItemStack
  * Inventory 工具
  */
 object InventoryUtil {
+    /**
+     * 通过  ConfigurationSection 给设置 Inventory 物品
+     *
+     * @param player    玩家(用于物品Papi变量)
+     * @param section   物品section
+     */
+    fun Inventory.setItemSection(player: Player, section: ConfigurationSection) {
+        val itemStack = ItemUtil.getItemStack(player, section)
+        val `object` = section["Index"]
+        if (`object` is List<*>) {
+            for (index in `object`) {
+                this.setItem(itemStack, index as Int)
+            }
+        }
+        if (`object` is Int) {
+            this.setItem(itemStack, `object`)
+        }
+    }
+
+    /**
+     * 通过  ConfigurationSection 给设置 Inventory 物品
+     *
+     * @param section   物品section
+     */
+    fun Inventory.setItemSection(section: ConfigurationSection) {
+        val itemStack = ItemUtil.getItemStack(section)
+        val `object` = section["Index"]
+        if (`object` is List<*>) {
+            for (index in `object`) {
+                this.setItem(itemStack, index as Int)
+            }
+        }
+        if (`object` is Int) {
+            this.setItem(itemStack, `object`)
+        }
+    }
+
+    /**
+     * 设置 Inventory 物品
+     *
+     * @param itemStack 物品
+     * @param index     槽位
+     */
+    fun Inventory.setItem(itemStack: ItemStack, index: Int) {
+        if (index >= this.size) {
+            return
+        }
+        this.setItem(index, itemStack)
+    }
+
     /**
      * 获取 Inventory 可存储多少指定物品
      *
@@ -30,11 +82,11 @@ object InventoryUtil {
      */
     fun Inventory.getItemStackCurrent(itemStack: ItemStack?): Int {
         var current = 0
-        if (!isItemStack(itemStack)) {
+        if (!itemStack.isItemStack()) {
             return current
         }
         for (content in this.storageContents) {
-            if (!equalsItem(itemStack, content)) {
+            if (!itemStack.equalsItem(content)) {
                 continue
             }
             current += content.amount

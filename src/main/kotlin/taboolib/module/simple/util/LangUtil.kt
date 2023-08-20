@@ -29,8 +29,8 @@ object LangUtil {
      * @param args    占位符替换值
      */
     @JvmStatic
-    fun Player.sendLang(key: String, vararg args: String) {
-        this.sendMessage(format(getLang(key), args))
+    fun Player.sendLang(key: String, vararg args: Any) {
+        this.sendMessage(getLang(key, * args))
     }
 
     /**
@@ -50,8 +50,8 @@ object LangUtil {
      * @param args    占位符替换值
      */
     @JvmStatic
-    fun CommandSender.sendLang(key: String, vararg args: String) {
-        this.sendMessage(format(getLang(key), args))
+    fun CommandSender.sendLang(key: String, vararg args: Any) {
+        this.sendMessage(getLang(key, *args))
     }
 
     /**
@@ -63,9 +63,23 @@ object LangUtil {
     @JvmStatic
     fun getLang(key: String): String {
         return (config.getString("message.prefix") + config.getString(
-            "message.$key",
-            "§a请按照最新配置文件确保无误"
+            key, "§a请按照最新配置文件确保无误"
         )).colored()
+    }
+
+    /**
+     * 获取消息
+     *
+     * @param key config
+     * @param args    占位符替换值
+     */
+    @JvmStatic
+    fun getLang(key: String, vararg args: Any): String {
+        return format(
+            (config.getString("prefix") + config.getString(
+                key, "§a请按照最新配置文件确保无误"
+            )).colored(), *args
+        )
     }
 
     /**
@@ -75,7 +89,7 @@ object LangUtil {
      * @param args    占位符替换值
      * @return 格式化后的消息
      */
-    private fun format(message: String, args: Array<out String>): String {
+    private fun format(message: String, vararg args: Any): String {
         var format = message
         for ((i, arg) in args.asList().withIndex()) {
             format = format.replace("{$i}", arg)

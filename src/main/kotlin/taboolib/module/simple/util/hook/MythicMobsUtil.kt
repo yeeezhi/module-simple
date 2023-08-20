@@ -5,6 +5,7 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.module.simple.util.ItemUtil.isItemStack
 
 /**
  * MM物品库工具
@@ -17,14 +18,17 @@ object MythicMobsUtil {
     fun listener(event: MythicReloadedEvent) {
         for (itemName in map.keys) {
             try {
-                val itemStack = MythicMobs.inst().itemManager.getItemStack(itemName) ?: continue
+                val itemStack = MythicMobs.inst().itemManager.getItemStack(itemName)
+                if (!itemStack.isItemStack()) {
+                    map.remove(itemName)
+                    continue
+                }
                 itemStack.amount = 1
                 map[itemName] = itemStack
-            } catch (ignored: java.lang.Exception) {
-               map.remove(itemName)
+            } catch (ignored: Exception) {
+                map.remove(itemName)
             }
         }
-        println(map)
     }
 
     /**
@@ -46,16 +50,20 @@ object MythicMobsUtil {
      */
     fun getItem(itemName: String, amount: Int): ItemStack? {
         var itemStack: ItemStack?
-        if (map.containsKey(itemName)) {
-            itemStack = map[itemName]!!.clone()
-            itemStack.amount = amount
-        } else {
-            try {
-                itemStack = MythicMobs.inst().itemManager.getItemStack(itemName)
+        try {
+            if (map.containsKey(itemName)) {
+                itemStack = map[itemName]!!.clone()
                 itemStack.amount = amount
-            } catch (exception: Exception) {
-                throw RuntimeException(exception)
+            } else {
+                itemStack = MythicMobs.inst().itemManager.getItemStack(itemName)
+                if (itemStack == null) {
+                    return null
+                }
+                itemStack.amount = amount
+                map[itemName] = itemStack
             }
+        } catch (exception: Exception) {
+            throw RuntimeException("item acquisition failed", exception)
         }
         return itemStack
     }
