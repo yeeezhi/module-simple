@@ -16,8 +16,6 @@ repositories {
 
 dependencies {
     compileOnly("cn.hutool:hutool-all:5.8.20")
-    compileOnly("com.alibaba.fastjson2:fastjson2:2.0.35")
-    compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.39")
 
     compileOnly("io.izzel.taboolib:common:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
