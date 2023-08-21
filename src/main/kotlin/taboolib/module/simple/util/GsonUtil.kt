@@ -5,10 +5,11 @@ package taboolib.module.simple.util
 import cn.hutool.core.io.file.FileReader
 import cn.hutool.core.io.file.FileWriter
 import com.google.gson.Gson
-import org.serverct.ersha.jd.T
 import taboolib.common.Isolated
+import taboolib.common.env.RuntimeDependency
 import java.io.File
 
+@RuntimeDependency("com.google.code.gson:gson:2.8.0", test = "com.google.gson.Gson")
 object GsonUtil {
     val gson = Gson()
 

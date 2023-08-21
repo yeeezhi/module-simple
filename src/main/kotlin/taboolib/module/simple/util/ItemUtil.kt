@@ -11,6 +11,7 @@ import taboolib.module.chat.colored
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 import taboolib.platform.compat.replacePlaceholder
+import taboolib.platform.util.isAir
 import java.util.*
 import kotlin.math.min
 
@@ -24,28 +25,6 @@ object ItemUtil {
         private set
 
     /**
-     * 判断ItemStack是否是物品
-     *
-     * @return true: 是物品,false: 物品为Null或者类型为AIR
-     */
-
-    fun ItemStack?.isItemStack(): Boolean {
-        val version = Bukkit.getServer().javaClass.getPackage().name.replace(".", ",").split(",".toRegex())
-            .dropLastWhile { it.isEmpty() }.toTypedArray()[3]
-        if (this == null) {
-            return false
-        }
-        // 低版本
-        return if (version.contains("v1_12") || version.contains("v1_11") || version.contains("v1_10") || version.contains(
-                "v1_9"
-            ) || version.contains("v1_8")
-        ) {
-            this.type != Material.AIR
-        } else this.type.isItem
-    }
-
-
-    /**
      * 获取物品Lore列表
      *
      * @return 物品Lore列表
@@ -53,7 +32,7 @@ object ItemUtil {
 
     fun ItemStack.getLore(): MutableList<String> {
         val list: MutableList<String> = ArrayList()
-        if (!this.isItemStack()) {
+        if (!this.isAir) {
             return list
         }
         return if (this.itemMeta.lore == null) {
@@ -68,7 +47,7 @@ object ItemUtil {
      */
 
     fun ItemStack.setLore(list: List<String>): ItemStack {
-        if (!this.isItemStack()) {
+        if (!this.isAir) {
             return this
         }
         if (this.itemMeta == null) {
@@ -93,7 +72,7 @@ object ItemUtil {
     fun ItemStack.addEnchant(
         enchantment: Enchantment, level: Int, ignoreLevelRestriction: Boolean
     ): ItemStack {
-        if (!this.isItemStack()) {
+        if (!this.isAir) {
             return this
         }
         if (this.itemMeta == null) {
@@ -112,7 +91,7 @@ object ItemUtil {
      */
 
     fun ItemStack.isLore(): Boolean {
-        return if (!this.isItemStack()) {
+        return if (!this.isAir) {
             false
         } else this.itemMeta != null && this.itemMeta.lore != null
     }
@@ -229,66 +208,6 @@ object ItemUtil {
         return item
     }
 
-    /**
-     * 通过section获取ItemStack
-     * section格式:
-     * Id: 276
-     * Data: 0
-     * Name: "测试物品"
-     * Lore:
-     * - "测试Lore"
-     * - "测试Lore2"
-     *
-     * @param section 物品section
-     * @return 获取的物品
-     */
-
-    fun getItemStack(section: ConfigurationSection): ItemStack {
-        val id = section.getInt("Id")
-        val data = section.getInt("Data")
-        val name = section.getString("Name")
-        val loreList = section.getStringList("Lore").colored()
-        val itemStack = create(id, data, name, loreList)
-        if (section.getKeys(false).contains("Amount")) {
-            itemStack.amount = min(section.getInt("Amount").toDouble(), itemStack.maxStackSize.toDouble()).toInt()
-        }
-        // 物品附魔
-        val enchantmentSection = section.getConfigurationSection("Enchantment")
-        if (enchantmentSection == null) {
-            return itemStack
-        }
-        for (enchantment in enchantmentSection.getKeys(false)) {
-            val level = enchantmentSection.getInt(enchantment)
-            itemStack.addEnchant(Enchantment.getByName(enchantment), level, true)
-
-        }
-        return itemStack
-    }
-
-    /**
-     * 通过section获取ItemStack(支持PAPI)
-     * section格式:
-     * Id: 276
-     * Data: 0
-     * Name: "测试物品"
-     * Lore:
-     * - "测试Lore"
-     * - "测试Lore2"
-     *
-     * @param player  玩家
-     * @param section 物品section
-     * @return 获取的物品
-     */
-
-    fun getItemStack(player: Player, section: ConfigurationSection): ItemStack {
-        val itemStack = getItemStack(section)
-        val loreList = itemStack.getLore()
-        return if (loreList.isEmpty()) {
-            itemStack
-        } else itemStack.setLore(
-            loreList.replacePlaceholder(player)
-        )
-    }
 
     /**
      * 合并物品数量
