@@ -8,9 +8,9 @@ import taboolib.library.configuration.ConfigurationSection
 import taboolib.library.xseries.XItemStack
 import taboolib.module.simple.util.ItemUtil.equalsItem
 import taboolib.module.simple.util.ItemUtil.getLore
-import taboolib.module.simple.util.ItemUtil.isItemStack
 import taboolib.module.simple.util.ItemUtil.setLore
 import taboolib.platform.compat.replacePlaceholder
+import taboolib.platform.util.isAir
 
 /**
  * Inventory 工具
@@ -87,7 +87,7 @@ object InventoryUtil {
      */
     fun Inventory.getItemStackCurrent(itemStack: ItemStack?): Int {
         var current = 0
-        if (!itemStack.isItemStack()) {
+        if (itemStack.isAir) {
             return current
         }
         for (content in this.storageContents) {

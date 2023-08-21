@@ -4,16 +4,11 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import taboolib.library.configuration.ConfigurationSection
-import taboolib.module.chat.colored
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
-import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.isAir
 import java.util.*
-import kotlin.math.min
 
 /**
  * 物品工具
@@ -32,7 +27,7 @@ object ItemUtil {
 
     fun ItemStack.getLore(): MutableList<String> {
         val list: MutableList<String> = ArrayList()
-        if (!this.isAir) {
+        if (this.isAir) {
             return list
         }
         return if (this.itemMeta.lore == null) {
@@ -47,7 +42,7 @@ object ItemUtil {
      */
 
     fun ItemStack.setLore(list: List<String>): ItemStack {
-        if (!this.isAir) {
+        if (this.isAir) {
             return this
         }
         if (this.itemMeta == null) {
@@ -72,7 +67,7 @@ object ItemUtil {
     fun ItemStack.addEnchant(
         enchantment: Enchantment, level: Int, ignoreLevelRestriction: Boolean
     ): ItemStack {
-        if (!this.isAir) {
+        if (this.isAir) {
             return this
         }
         if (this.itemMeta == null) {
@@ -91,7 +86,7 @@ object ItemUtil {
      */
 
     fun ItemStack.isLore(): Boolean {
-        return if (!this.isAir) {
+        return if (this.isAir) {
             false
         } else this.itemMeta != null && this.itemMeta.lore != null
     }

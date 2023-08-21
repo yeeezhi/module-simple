@@ -5,7 +5,7 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.module.simple.util.ItemUtil.isItemStack
+import taboolib.platform.util.isAir
 
 /**
  * MM物品库工具
@@ -19,7 +19,7 @@ object MythicMobsUtil {
         for (itemName in map.keys) {
             try {
                 val itemStack = MythicMobs.inst().itemManager.getItemStack(itemName)
-                if (!itemStack.isItemStack()) {
+                if (itemStack.isAir) {
                     map.remove(itemName)
                     continue
                 }
