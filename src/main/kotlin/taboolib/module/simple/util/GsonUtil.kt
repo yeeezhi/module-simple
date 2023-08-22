@@ -4,14 +4,18 @@ package taboolib.module.simple.util
 
 import cn.hutool.core.io.file.FileReader
 import cn.hutool.core.io.file.FileWriter
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import taboolib.common.Isolated
+import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import java.io.File
 
-@RuntimeDependency("com.google.code.gson:gson:2.8.0", test = "com.google.gson.Gson")
+@RuntimeDependencies(
+    RuntimeDependency("!cn.hutool:hutool-all:5.8.20", test = "cn.hutool.Hutool"),
+    RuntimeDependency("com.google.code.gson:gson:2.8.0", test = "com.google.gson.Gson")
+)
 object GsonUtil {
-    val gson = Gson()
+    val gson = GsonBuilder().setPrettyPrinting().create()
 
     /**
      * 实体序列化写入文件

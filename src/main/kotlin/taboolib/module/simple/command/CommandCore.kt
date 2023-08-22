@@ -3,6 +3,8 @@ package taboolib.module.simple.command
 import org.bukkit.command.SimpleCommandMap
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
 
 object CommandCore {
     var HOOK_SUB_COMMANDS: MutableMap<String, SubCommand> = HashMap()
@@ -39,5 +41,11 @@ object CommandCore {
         HOOK_SUB_COMMANDS[label] = subCommand
         val cmdObj = CommandExecute(label)
         commandMap.register(plugin.description.name, cmdObj)
+    }
+
+    @Awake(LifeCycle.DISABLE)
+    fun disable() {
+        HOOK_SUB_COMMANDS.clear()
+        COMMAND_ARGS.clear()
     }
 }
