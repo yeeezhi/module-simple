@@ -11,7 +11,7 @@ import taboolib.common.env.RuntimeDependency
 import java.io.File
 
 @RuntimeDependencies(
-    RuntimeDependency("!cn.hutool:hutool-all:5.8.20", test = "cn.hutool.Hutool"),
+    RuntimeDependency("cn.hutool:hutool-all:5.8.20", test = "cn.hutool.Hutool"),
     RuntimeDependency("com.google.code.gson:gson:2.8.0", test = "com.google.gson.Gson")
 )
 object GsonUtil {

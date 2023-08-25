@@ -15,5 +15,7 @@ annotation class CommandPart(
     // 可以后台执行
     val canConsole: Boolean = false,
     // 隐藏指令
-    val hide: Boolean = false
+    val hide: Boolean = false,
+    // 异步执行
+    val async: Boolean = false
 )

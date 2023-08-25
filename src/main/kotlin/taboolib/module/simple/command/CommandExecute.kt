@@ -4,6 +4,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
+import taboolib.common.platform.function.submit
 
 class CommandExecute(name: String) : Command(name) {
     override fun execute(sender: CommandSender, label: String, args: Array<String>): Boolean {
@@ -51,7 +52,7 @@ class CommandExecute(name: String) : Command(name) {
                 return false
             }
             invokeMethod.setAccessible(true)
-            invokeMethod.invoke(subCommand)
+            submit(async = commandPart.async) { invokeMethod.invoke(subCommand) }
         } catch (var11: Exception) {
             throw RuntimeException(var11)
         }

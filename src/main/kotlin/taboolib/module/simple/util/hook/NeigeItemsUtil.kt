@@ -2,7 +2,7 @@ package taboolib.module.simple.util.hook
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.manager.ItemManager.getItemStack
+import pers.neige.neigeitems.manager.ItemManager
 
 /**
  * NeigeItems物品库工具
@@ -27,7 +27,7 @@ object NeigeItemsUtil {
      */
     fun getItem(itemName: String, amount: Int): ItemStack? {
         return try {
-            val itemStack = getItemStack(itemName) ?: return null
+            val itemStack = ItemManager.getItemStack(itemName) ?: return null
             itemStack.amount = amount
             itemStack
         } catch (exception: Exception) {
@@ -56,7 +56,7 @@ object NeigeItemsUtil {
      */
     fun getItem(player: Player, itemName: String, amount: Int): ItemStack? {
         return try {
-            val itemStack = getItemStack(itemName, player) ?: return null
+            val itemStack = ItemManager.getItemStack(itemName, player) ?: return null
             itemStack.amount = amount
             itemStack
         } catch (exception: Exception) {
