@@ -2,16 +2,15 @@
 
 package taboolib.module.simple.util
 
-import cn.hutool.core.io.file.FileReader
-import cn.hutool.core.io.file.FileWriter
 import com.google.gson.GsonBuilder
 import taboolib.common.Isolated
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
 
 @RuntimeDependencies(
-    RuntimeDependency("cn.hutool:hutool-all:5.8.20", test = "cn.hutool.Hutool"),
     RuntimeDependency("com.google.code.gson:gson:2.8.9", test = "com.google.gson.Gson")
 )
 object GsonUtil {
@@ -33,7 +32,7 @@ object GsonUtil {
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
         val fileReader = FileReader(this)
-        return gson.fromJson(fileReader.readString(), classOfT)
+        return gson.fromJson(fileReader.readText(), classOfT)
     }
 
     fun Any.toJSONString(): String {
