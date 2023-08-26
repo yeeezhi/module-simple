@@ -24,6 +24,7 @@ object GsonUtil {
     fun File.writerAny(any: Any) {
         val writer = FileWriter(this)
         writer.write(gson.toJson(any))
+        writer.close()
     }
 
     /**
@@ -32,7 +33,13 @@ object GsonUtil {
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
         val fileReader = FileReader(this)
-        return gson.fromJson(fileReader.readText(), classOfT)
+        var data = fileReader.readText()
+        if (data.isEmpty()) {
+            throw Error("file content cannot be empty ${this.path}")
+        }
+        val any = gson.fromJson(data, classOfT)
+        fileReader.close()
+        return any
     }
 
     fun Any.toJSONString(): String {
