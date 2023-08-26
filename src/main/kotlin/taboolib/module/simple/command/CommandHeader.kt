@@ -1,8 +1,13 @@
 package taboolib.module.simple.command
 
 @Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class CommandHeader(
+    val label: Array<String>,
+)
+@Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
-annotation class CommandPart(
+annotation class CommandBody(
     val cmd: String = "", val args: Array<String> = [],
     // 命令描述
     val describe: String = "命令描述",

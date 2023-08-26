@@ -5,13 +5,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.submitAsync
+import taboolib.platform.util.bukkitPlugin
 
 class CommandExecute(name: String) : Command(name) {
     override fun execute(sender: CommandSender, label: String, args: Array<String>): Boolean {
-        if (!CommandCore.HOOK_SUB_COMMANDS.containsKey(label)) {
+        if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
             return false
         }
-        val subCommand = CommandCore.HOOK_SUB_COMMANDS[label]!!
+        val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
         subCommand.sender = sender
         subCommand.label = label
         subCommand.args = args
@@ -23,7 +24,7 @@ class CommandExecute(name: String) : Command(name) {
             subCommand.showHelp(sender)
             return true
         }
-        val labelMap = CommandCore.COMMAND_ARGS[label]
+        val labelMap = CommandLoader.COMMAND_ARGS[label]
         if (labelMap.isNullOrEmpty()) {
             return true
         }
@@ -32,27 +33,26 @@ class CommandExecute(name: String) : Command(name) {
             subCommand.showHelp(sender)
             return true
         }
-        val plugin = subCommand.plugin
-        if (!plugin.isEnabled) {
+        if (!bukkitPlugin.isEnabled) {
             return true
         }
         try {
             val invokeMethod = clazz.getMethod(invokeMethodName)
-            val commandPart = invokeMethod.getAnnotation(CommandPart::class.java)
+            val commandBody = invokeMethod.getAnnotation(CommandBody::class.java)
             // 判断是否后台
-            if (!commandPart.canConsole && sender is ConsoleCommandSender) {
+            if (!commandBody.canConsole && sender is ConsoleCommandSender) {
                 return false
             }
             // 判断管理员
-            if (commandPart.needAdmin && !sender.isOp) {
+            if (commandBody.needAdmin && !sender.isOp) {
                 return false
             }
             // 判断权限
-            if (commandPart.permission.isNotEmpty() && sender.hasPermission(commandPart.permission)) {
+            if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
                 return false
             }
             invokeMethod.setAccessible(true)
-            if (commandPart.async) {
+            if (commandBody.async) {
                 submitAsync { invokeMethod.invoke(subCommand) }
             } else {
                 invokeMethod.invoke(subCommand)

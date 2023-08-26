@@ -6,12 +6,12 @@ import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import taboolib.module.chat.impl.DefaultComponent
+import taboolib.platform.util.bukkitPlugin
 
 open class SubCommand {
     open lateinit var sender: CommandSender
     open lateinit var label: String
     open lateinit var args: Array<String>
-    open lateinit var plugin: Plugin
     open lateinit var player: Player
 
     open fun showHelp(sender: CommandSender) {
@@ -22,9 +22,9 @@ open class SubCommand {
         }
         sender.spigot().sendMessage(
             *ComponentSerializer.parse(
-                DefaultComponent().append("§f§l " + plugin.name).hoverText(
+                DefaultComponent().append("§f§l " + bukkitPlugin.name).hoverText(
                     """
-                    §7Plugin version: §f${plugin.description.version}
+                    §7Plugin version: §f${bukkitPlugin.description.version}
                      """.trimIndent()
                 ).toRawMessage()
             )
@@ -33,34 +33,34 @@ open class SubCommand {
         sender.sendMessage("§7 命令: §f/$label§8 [...]")
         sender.sendMessage("§7 参数:")
         for (method in methods) {
-            if (!method.isAnnotationPresent(CommandPart::class.java)) {
+            if (!method.isAnnotationPresent(CommandBody::class.java)) {
                 continue
             }
-            val commandPart = method.getAnnotation(CommandPart::class.java)
-            if (commandPart.hide) {
+            val commandBody = method.getAnnotation(CommandBody::class.java)
+            if (commandBody.hide) {
                 continue
             }
             // 判断是否后台
-            if (!commandPart.canConsole && sender is ConsoleCommandSender) {
+            if (!commandBody.canConsole && sender is ConsoleCommandSender) {
                 continue
             }
             // 判断管理员
-            if (commandPart.needAdmin && !sender.isOp) {
+            if (commandBody.needAdmin && !sender.isOp) {
                 continue
             }
             // 判断权限
-            if (commandPart.permission.isNotEmpty() && sender.hasPermission(commandPart.permission)) {
+            if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
                 continue
             }
-            val invokeName = if (commandPart.cmd == "") method.name else commandPart.cmd
+            val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
             val msgSb = StringBuilder()
             msgSb.append("  §8- §f").append(invokeName)
-            for (arg in commandPart.args) {
+            for (arg in commandBody.args) {
                 msgSb.append(" §f<§7").append(arg).append("§f>")
             }
             sender.spigot().sendMessage(
                 *ComponentSerializer.parse(
-                    DefaultComponent().append(msgSb.toString()).hoverText("§7${commandPart.describe}")
+                    DefaultComponent().append(msgSb.toString()).hoverText("§7${commandBody.describe}")
                         .clickSuggestCommand("/${label} $invokeName").toRawMessage()
                 )
 
@@ -68,7 +68,7 @@ open class SubCommand {
 
             sender.spigot().sendMessage(
                 *ComponentSerializer.parse(
-                    DefaultComponent().append("§7    " + commandPart.describe).hoverText("§7${commandPart.describe}")
+                    DefaultComponent().append("§7    " + commandBody.describe).hoverText("§7${commandBody.describe}")
                         .clickSuggestCommand("/${label} $invokeName").toRawMessage()
                 )
             )

@@ -17,7 +17,21 @@ object PlayerUtil {
      */
     fun Player.addItem(itemStack: ItemStack) {
         val list: MutableList<ItemStack> = ArrayList()
-        list.add(itemStack)
+        list.add(itemStack.clone())
+        player.addItem(list)
+    }
+
+    /**
+     * 给予玩家物品
+     *
+     * @param itemStack 物品
+     * @param amount 数量
+     */
+    fun Player.addItem(itemStack: ItemStack, amount: Int) {
+        val list: MutableList<ItemStack> = ArrayList()
+        val itemClone = itemStack.clone()
+        itemClone.amount = amount
+        list.add(itemClone)
         player.addItem(list)
     }
 
