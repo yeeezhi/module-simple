@@ -17,6 +17,7 @@ repositories {
 dependencies {
     compileOnly("cn.hutool:hutool-all:5.8.20")
 
+    compileOnly("com.google.code.gson:gson:2.8.9")
     compileOnly("io.izzel.taboolib:common:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-configuration:$taboolibVersion")
