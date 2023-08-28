@@ -33,13 +33,12 @@ object GsonUtil {
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
         val fileReader = FileReader(this)
-        var data = fileReader.readText()
+        val data = fileReader.readText()
+        fileReader.close()
         if (data.isEmpty()) {
             throw Error("file content cannot be empty ${this.path}")
         }
-        val any = gson.fromJson(data, classOfT)
-        fileReader.close()
-        return any
+        return gson.fromJson(data, classOfT)
     }
 
     fun Any.toJSONString(): String {
