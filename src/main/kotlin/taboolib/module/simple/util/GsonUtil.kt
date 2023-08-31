@@ -22,6 +22,9 @@ object GsonUtil {
      * @param any 实体
      */
     fun File.writerAny(any: Any) {
+        if (!this.exists()) {
+            this.createNewFile()
+        }
         val writer = FileWriter(this)
         writer.write(gson.toJson(any))
         writer.close()
