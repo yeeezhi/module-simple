@@ -23,6 +23,10 @@ object GsonUtil {
      */
     fun File.writerAny(any: Any) {
         if (!this.exists()) {
+            val fileParent: File = this.getParentFile()
+            if (!fileParent.exists()) {
+                fileParent.mkdirs()
+            }
             this.createNewFile()
         }
         val writer = FileWriter(this)
