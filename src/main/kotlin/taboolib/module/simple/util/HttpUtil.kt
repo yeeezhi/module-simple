@@ -1,5 +1,6 @@
 package taboolib.module.simple.util
 
+import com.google.common.base.Utf8
 import taboolib.module.simple.util.StringUtil.isNotEmpty
 import java.io.*
 import java.net.HttpURLConnection
@@ -164,11 +165,7 @@ object HttpUtil {
      */
     @Throws(IOException::class, KeyManagementException::class, NoSuchAlgorithmException::class)
     fun doRequest(
-        method: String,
-        url: String,
-        requestContent: String,
-        requestType: String,
-        timeout: Int
+        method: String, url: String, requestContent: String, requestType: String, timeout: Int
     ): String {
         var conn: HttpURLConnection? = null
         var out: OutputStream? = null
@@ -268,16 +265,15 @@ object HttpUtil {
     }
 
     /**
-     * 从网络Url中下载文件
+     * 从网络URL中下载文件
      *
-     * @param urlStr   路径
+     * @param url   下载链接
      * @param saveDir  保存路径
      * @param fileName 文件名称
      * @throws IOException IOException异常
      */
     @Throws(IOException::class)
-    fun downloadFile(urlStr: String?, saveDir: File, fileName: String) {
-        val url = URL(urlStr)
+    fun downloadFile(url: URL, saveDir: File, fileName: String) {
         val conn = url.openConnection() as HttpURLConnection
         //设置超时间为3秒
         conn.setConnectTimeout(CONNECT_TIMEOUT)
@@ -296,6 +292,27 @@ object HttpUtil {
         fos.write(getData)
         fos.close()
         inputStream.close()
+    }
+
+    /**
+     * 从网络URL中获取内容
+     *
+     * @param url   下载链接
+     * @throws IOException IOException异常
+     */
+    @Throws(IOException::class)
+    fun downloadContent(url: URL): String {
+        val conn = url.openConnection() as HttpURLConnection
+        //设置超时间为3秒
+        conn.setConnectTimeout(CONNECT_TIMEOUT)
+        //防止屏蔽程序抓取而返回403错误
+        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)")
+        //得到输入流
+        val inputStream = conn.inputStream
+
+        val content = String(conn.inputStream.readBytes(), charset("UTF-8"))
+        inputStream.close()
+        return content
     }
 
     /**

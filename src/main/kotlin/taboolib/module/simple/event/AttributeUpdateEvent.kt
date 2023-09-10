@@ -145,9 +145,9 @@ class AttributeUpdateEvent(private val player: Player) : BukkitProxyEvent() {
          * @return 属性物品列表
          */
         get() {
-            val lore_list: MutableList<String> = ArrayList()
-            playerItemStacks.forEach(Consumer { itemStack: ItemStack -> lore_list.addAll(itemStack.clone().getLore()) })
-            return lore_list
+            val loreList: MutableList<String> = ArrayList()
+            playerItemStacks.forEach(Consumer { itemStack: ItemStack -> loreList.addAll(itemStack.clone().getLore()) })
+            return loreList
         }
 
 }
