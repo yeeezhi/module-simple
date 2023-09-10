@@ -26,6 +26,5 @@ object SXAttributeListener {
         attributeUpdateEvent.call()
         val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.playerLores)
         SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
-        println("当前线程: " + Thread.currentThread().name)
     }
 }
