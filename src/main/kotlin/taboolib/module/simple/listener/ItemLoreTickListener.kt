@@ -22,7 +22,7 @@ object ItemLoreTickListener {
     @EventHandler
     fun onItemLoreStatusEvent(event: ItemLoreStatusEvent) {
         val player: Player = event.entity
-        val managers: MutableList<ItemLoreManager> = event.getManager()
+        val managers: MutableList<ItemLoreManager> = event.manager
         updateAttribute(player, managers)
     }
 

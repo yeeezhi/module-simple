@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.submit
 import taboolib.module.simple.event.AttributeUpdateEvent
 
 object SXAttributeListener {
@@ -21,10 +22,13 @@ object SXAttributeListener {
         if (event.entity !is Player) {
             return
         }
-        val player = event.entity as Player
-        val attributeUpdateEvent = AttributeUpdateEvent(player)
-        attributeUpdateEvent.call()
-        val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.playerLores)
-        SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
+        // 主线程执行
+        submit {
+            val player = event.entity as Player
+            val attributeUpdateEvent = AttributeUpdateEvent(player)
+            attributeUpdateEvent.call()
+            val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.playerLores)
+            SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
+        }
     }
 }
