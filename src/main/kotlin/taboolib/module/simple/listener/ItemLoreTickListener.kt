@@ -38,7 +38,7 @@ object ItemLoreTickListener {
             return
         }
         val player = event.entity as Player
-        val managers: MutableList<ItemLoreManager> = event.damagerManager
+        val managers: MutableList<ItemLoreManager> = event.damagerManager ?: return
         updateAttribute(player, managers)
     }
 
