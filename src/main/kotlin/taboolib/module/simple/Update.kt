@@ -27,7 +27,6 @@ object Update {
         if (StringUtil.compareVersion(bukkitPlugin.description.version, version) > 0) {
             return
         }
-
         val prefix = config.getString("message.prefix")!!.replaceWithOrder(bukkitPlugin.name)
         val versionMsg = config.getString("message.version")!!.replaceWithOrder(version)
         val downloadMsg = config.getString("message.download")!!.replaceWithOrder(url)
@@ -38,9 +37,6 @@ object Update {
         console().sendMessage(prefix + updateMsg)
         update.forEach { console().sendMessage(prefix + updateHead + it) }
         console().sendMessage(updateHead)
-        info("url: $url")
-        info("version: $version")
-        info("update: $update")
         bukkitPlugin.file.delete()
     }
 

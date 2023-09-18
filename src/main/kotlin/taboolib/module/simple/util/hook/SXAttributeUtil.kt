@@ -12,12 +12,12 @@ object SXAttributeUtil {
      * 根据MM物品名获取物品
      *
      * @param player    玩家
-     * @param item_name 物品名
+     * @param itemName 物品名
      * @return 物品
      */
-    fun getItem(player: Player?, item_name: String?): ItemStack {
+    fun getItem(player: Player, itemName: String): ItemStack {
         return try {
-            val itemStack = SXAttribute.getApi().getItem(item_name, player)
+            val itemStack = SXAttribute.getApi().getItem(itemName, player)
             itemStack.amount = 1
             itemStack
         } catch (exception: Exception) {
@@ -29,13 +29,13 @@ object SXAttributeUtil {
      * 根据MM物品名获取指定数量的物品
      *
      * @param player    玩家
-     * @param item_name 物品名
+     * @param itemName 物品名
      * @param amount    物品数量
      * @return 物品
      */
-    fun getItem(player: Player?, item_name: String?, amount: Int): ItemStack {
+    fun getItem(player: Player, itemName: String, amount: Int): ItemStack {
         return try {
-            val itemStack = SXAttribute.getApi().getItem(item_name, player)
+            val itemStack = SXAttribute.getApi().getItem(itemName, player)
             itemStack.amount = amount
             itemStack
         } catch (exception: Exception) {
