@@ -13,17 +13,16 @@ object ResourceUtil {
     /**
      * 解压资源文件
      *
-     * @param plugin     插件
      * @param folderName 目录名
      * @param fileNames  文件名
      */
-    fun saveResource(plugin: Plugin, folderName: String, fileNames: Array<String>) {
+    fun Plugin.saveResource(folderName: String, fileNames: Array<String>) {
         if (fileNames.isEmpty()) {
             return
         }
-        val folder = File(plugin.dataFolder, folderName)
+        val folder = File(this.dataFolder, folderName)
         var charset = "US-ASCII"
-        var vTmp = plugin.server.bukkitVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        var vTmp = this.server.bukkitVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         vTmp = if (vTmp.contains("-")) vTmp.split("\\-".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()[0] else vTmp
         if (vTmp.toInt() > 8) {
@@ -42,7 +41,7 @@ object ResourceUtil {
                 } catch (ignored: Exception) {
                 }
             }
-            val `in` = plugin.getResource(path)
+            val `in` = this.getResource(path)
             var out: Writer? = null
             if (`in` == null) {
                 continue
