@@ -9,7 +9,7 @@ object ConfigUtil {
     /**
      * 配置文件补全,移除多余参数
      */
-    fun Configuration.restock(path: String): Configuration {
+    fun Configuration.restock(path: String, excludes: List<String> = emptyList()): Configuration {
         val origin = bukkitPlugin.getResource(path)?.let {
             val reader = InputStreamReader(it, "UTF-8")
             val config = Configuration.loadFromReader(reader)
@@ -17,6 +17,11 @@ object ConfigUtil {
             config
         } ?: return this
         origin.getKeys(true).forEach { key ->
+            excludes.forEach exclude@ {exclude ->
+                if (key.contains(exclude)){
+                    return@forEach
+                }
+            }
             if (!this.contains(key)) {
                 this[key] = origin[key]
             } else {
@@ -27,7 +32,16 @@ object ConfigUtil {
                 }
             }
         }
+
         this.getKeys(true).forEach { key ->
+            excludes.forEach exclude@ {exclude ->
+                if (key.contains(exclude)){
+                    return@forEach
+                }
+            }
+            if (excludes.contains(key)) {
+                return@forEach
+            }
             if (!origin.contains(key)) {
                 this[key] = null
             }
