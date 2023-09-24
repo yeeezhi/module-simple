@@ -25,7 +25,7 @@ object OriginAttributeListener {
         }
         val player = event.livingEntity as Player
         val attributeUpdateEvent = AttributeUpdateEvent(player)
-        Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
+        attributeUpdateEvent.callEvent()
         val attributeData: AttributeData = OriginAttributeAPI.loadList(attributeUpdateEvent.playerLores)
         OriginAttributeAPI.setExtra(player.uniqueId, bukkitPlugin.name, attributeData)
         OriginAttributeAPI.callUpdate(player)

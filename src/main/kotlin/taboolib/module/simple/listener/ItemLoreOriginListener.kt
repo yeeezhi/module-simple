@@ -10,10 +10,12 @@ import com.mchim.ItemLoreOrigin.ItemLoreData.Origin.LoreOrigin
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.isPrimaryThread
+import taboolib.common.platform.function.submitAsync
+import taboolib.common.util.sync
 import taboolib.module.simple.event.AttributeUpdateEvent
 
 object ItemLoreOriginListener {
@@ -29,8 +31,7 @@ object ItemLoreOriginListener {
             return
         }
         val player: Player = event.entity
-        val managers: MutableList<ItemLoreManager> = event.manager
-        updateAttribute(player, managers)
+        updateAttribute(player, event.manager)
     }
 
     /**
@@ -45,8 +46,7 @@ object ItemLoreOriginListener {
             return
         }
         val player = event.damager as Player
-        val managers: MutableList<ItemLoreManager> = event.damagerManager ?: return
-        updateAttribute(player, managers)
+        updateAttribute(player, event.damagerManager)
     }
 
     /**
@@ -58,8 +58,7 @@ object ItemLoreOriginListener {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onItemLoreTickEvent(event: ItemLoreTickEvent) {
         val player: Player = event.entity
-        val managers: MutableList<ItemLoreManager> = event.manager
-        updateAttribute(player, managers)
+        updateAttribute(player, event.manager)
     }
 
     /**
@@ -76,9 +75,8 @@ object ItemLoreOriginListener {
             managers.add(ItemLoreManager(player))
         }
         val attributeUpdateEvent = AttributeUpdateEvent(player)
-        attributeUpdateEvent.call()
+
         handleAttribute(player, managers, attributeUpdateEvent.playerLores)
-        println(attributeUpdateEvent.playerLores)
     }
 
     /**
