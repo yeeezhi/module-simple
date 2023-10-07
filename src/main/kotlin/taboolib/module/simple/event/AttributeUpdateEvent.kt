@@ -4,8 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import taboolib.common.platform.function.isPrimaryThread
-import taboolib.common.util.sync
 import taboolib.module.simple.util.ItemUtil
 import taboolib.module.simple.util.ItemUtil.getLore
 import taboolib.platform.type.BukkitProxyEvent
@@ -152,13 +150,4 @@ class AttributeUpdateEvent(private val player: Player) : BukkitProxyEvent() {
             playerItemStacks.forEach(Consumer { itemStack: ItemStack -> loreList.addAll(itemStack.clone().getLore()) })
             return loreList
         }
-
-    fun callEvent(): Boolean {
-        if (isPrimaryThread) {
-            Bukkit.getPluginManager().callEvent(this)
-        } else {
-            sync { Bukkit.getPluginManager().callEvent(this) }
-        }
-        return !isCancelled
-    }
 }

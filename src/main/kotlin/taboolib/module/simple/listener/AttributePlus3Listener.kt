@@ -24,7 +24,7 @@ object AttributePlus3Listener {
             val entity: Entity = event.attributeData.getEntity() as? Player ?: return@submit
             val player = entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
-            attributeUpdateEvent.callEvent()
+            attributeUpdateEvent.call()
             AttributeAPI.addSourceAttribute(event.attributeData, "SimpleLib", attributeUpdateEvent.playerLores)
         }
     }
