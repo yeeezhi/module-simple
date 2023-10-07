@@ -7,6 +7,7 @@ import org.serverct.ersha.jd.event.AttrAttributeUpdateEvent
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.submit
 import taboolib.module.simple.event.AttributeUpdateEvent
 import taboolib.platform.util.bukkitPlugin
 
@@ -20,13 +21,15 @@ object AttributePlus2Listener {
     @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onAttrAttributeUpdateEvent(event: AttrAttributeUpdateEvent) {
-        if (event.entity !is Player) {
-            return
+        submit {
+            if (event.entity !is Player) {
+                return@submit
+            }
+            val player = event.entity as Player
+            val attributeUpdateEvent = AttributeUpdateEvent(player)
+            attributeUpdateEvent.callEvent()
+            Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
+            AttributeAPI.addAttribute(player, bukkitPlugin.name, attributeUpdateEvent.playerLores)
         }
-        val player = event.entity as Player
-        val attributeUpdateEvent = AttributeUpdateEvent(player)
-        attributeUpdateEvent.callEvent()
-        Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
-        AttributeAPI.addAttribute(player, bukkitPlugin.name, attributeUpdateEvent.playerLores)
     }
 }

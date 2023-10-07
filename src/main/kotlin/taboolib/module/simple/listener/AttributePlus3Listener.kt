@@ -7,6 +7,7 @@ import org.serverct.ersha.api.event.AttrUpdateAttributeEvent
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.submit
 import taboolib.module.simple.event.AttributeUpdateEvent
 
 object AttributePlus3Listener {
@@ -19,10 +20,12 @@ object AttributePlus3Listener {
     @Ghost
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onAttrUpdateAttributeEvent(event: AttrUpdateAttributeEvent.After) {
-        val entity: Entity = event.attributeData.getEntity() as? Player ?: return
-        val player = entity as Player
-        val attributeUpdateEvent = AttributeUpdateEvent(player)
-        attributeUpdateEvent.callEvent()
-        AttributeAPI.addSourceAttribute(event.attributeData, "SimpleLib", attributeUpdateEvent.playerLores)
+        submit {
+            val entity: Entity = event.attributeData.getEntity() as? Player ?: return@submit
+            val player = entity as Player
+            val attributeUpdateEvent = AttributeUpdateEvent(player)
+            attributeUpdateEvent.callEvent()
+            AttributeAPI.addSourceAttribute(event.attributeData, "SimpleLib", attributeUpdateEvent.playerLores)
+        }
     }
 }
