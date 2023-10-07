@@ -221,7 +221,7 @@ object ItemUtil {
             val itemStack = item.clone()
             var add = true
             for (itemStack1 in list) {
-                if (itemStack.itemMeta == itemStack1.itemMeta) {
+                if (itemStack.equalsItem(itemStack1)){
                     itemStack1.amount += itemStack.amount
                     add = false
                 }
