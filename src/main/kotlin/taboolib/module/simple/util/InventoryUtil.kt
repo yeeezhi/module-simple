@@ -74,9 +74,24 @@ object InventoryUtil {
      * @return 可存储指定物品数量
      */
     fun Inventory.getInventoryVolume(itemStack: ItemStack?): Int {
-        return if (itemStack == null || itemStack.type == Material.AIR) {
-            -999
-        } else itemStack.type.maxStackSize * this.getInventoryResidue()
+        if (itemStack == null || itemStack.isAir) {
+            return 0
+        }
+        var volume = 0
+        for (content in this.storageContents) {
+            if (content.isAir) {
+                continue
+            }
+            if (!content.equalsItem(itemStack)) {
+                continue
+            }
+            if (content.amount >= content.maxStackSize) {
+                continue
+            }
+            volume += content.maxStackSize - content.amount
+        }
+        volume += itemStack.type.maxStackSize * this.getInventoryResidue()
+        return volume
     }
 
     /**

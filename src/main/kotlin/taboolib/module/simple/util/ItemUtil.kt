@@ -212,7 +212,7 @@ object ItemUtil {
      * @return 合并后的物品列表
      */
 
-    fun arrangeItemStacks(itemStacks: List<ItemStack>): List<ItemStack> {
+    fun arrangeItemStacks(itemStacks: List<ItemStack>): MutableList<ItemStack> {
         val list: MutableList<ItemStack> = ArrayList()
         for (item in itemStacks) {
             if (item.type == Material.AIR) {
