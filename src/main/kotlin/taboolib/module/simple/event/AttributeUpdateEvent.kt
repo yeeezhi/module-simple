@@ -1,6 +1,5 @@
 package taboolib.module.simple.event
 
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -9,7 +8,7 @@ import taboolib.module.simple.util.ItemUtil.getLore
 import taboolib.platform.type.BukkitProxyEvent
 import java.util.function.Consumer
 
-class AttributeUpdateEvent(private val player: Player) : BukkitProxyEvent() {
+class AttributeUpdateEvent(val player: Player) : BukkitProxyEvent() {
     private val attributeMap: MutableMap<String, MutableList<ItemStack>> = HashMap()
 
     /**

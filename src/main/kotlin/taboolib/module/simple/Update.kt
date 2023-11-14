@@ -3,7 +3,6 @@ package taboolib.module.simple
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.function.console
-import taboolib.common.platform.function.info
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.configuration.Configuration
 import taboolib.module.simple.util.HttpUtil

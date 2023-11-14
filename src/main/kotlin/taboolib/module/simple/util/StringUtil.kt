@@ -36,15 +36,8 @@ object StringUtil {
      * @return 数值
      */
     fun getNumber(str: String): String {
-        str.replace("§[\\s\\S]".toRegex(), "").replace("[^0-9-.]".toRegex(), "")
-        return if (str.isNotEmpty()) {
-            if (str.replace("[^.]".toRegex(), "").length <= 1 && str.replace(
-                    "[^-]".toRegex(), ""
-                ).length <= 1
-            ) str else "0"
-        } else {
-            "0"
-        }
+        val str: String = str.replace("§+[a-z0-9]".toRegex(), "").replace("[^-0-9.]".toRegex(), "")
+        return if (str.isNotEmpty() && str.replace("[^.]".toRegex(), "").length <= 1) str else "0"
     }
 
     /**
