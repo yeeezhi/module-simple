@@ -1,6 +1,5 @@
 package taboolib.module.simple.util
 
-import com.google.common.base.Utf8
 import taboolib.module.simple.util.StringUtil.isNotEmpty
 import java.io.*
 import java.net.HttpURLConnection
@@ -21,6 +20,7 @@ import javax.net.ssl.*
 object HttpUtil {
     const val REQUEST_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8"
     private const val REQUEST_TYPE_JSON = "application/json; charset=utf-8"
+    private const val REQUEST_TYPE_TEXT_HTML = "text/html; charset=utf-8";
     const val CHARSET = "utf-8"
     const val CONNECT_TIMEOUT = 5000
     const val READ_TIMEOUT = 5000
@@ -48,7 +48,7 @@ object HttpUtil {
     @JvmOverloads
     @Throws(NoSuchAlgorithmException::class, IOException::class, KeyManagementException::class)
     fun post(url: String, jsonContent: String, timeout: Int = CONNECT_TIMEOUT): String {
-        return doRequest("POST", url, jsonContent, REQUEST_TYPE_JSON, timeout)
+        return doRequest("POST", url, jsonContent, REQUEST_TYPE_TEXT_HTML, timeout)
     }
     /**
      * POST以application/x-www-form-urlencoded;charset=utf-8方式传输
