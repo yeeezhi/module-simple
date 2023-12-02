@@ -15,10 +15,20 @@ object PlayerUtil {
      *
      * @param itemStack 物品
      */
-    fun Player.addItem(itemStack: ItemStack) {
-        val list: MutableList<ItemStack> = ArrayList()
-        list.add(itemStack.clone())
-        player.addItem(list)
+    fun Player.addItem(itemStack: ItemStack?) {
+        if (itemStack.isAir) {
+            return
+        }
+        itemStack!!
+        // 解决堆叠超过上限的问题
+        var amount = itemStack.amount
+        while (amount > 0) {
+            val itemClone = itemStack.clone()
+            itemClone.amount = min(amount, itemClone.maxStackSize)
+            amount -= itemClone.amount
+            giveItem(itemClone)
+        }
+
     }
 
     /**
@@ -27,12 +37,14 @@ object PlayerUtil {
      * @param itemStack 物品
      * @param amount 数量
      */
-    fun Player.addItem(itemStack: ItemStack, amount: Int) {
-        val list: MutableList<ItemStack> = ArrayList()
+    fun Player.addItem(itemStack: ItemStack?, amount: Int) {
+        if (itemStack.isAir) {
+            return
+        }
+        itemStack!!
         val itemClone = itemStack.clone()
         itemClone.amount = amount
-        list.add(itemClone)
-        player.addItem(list)
+        addItem(itemClone)
     }
 
     /**
@@ -41,21 +53,6 @@ object PlayerUtil {
      * @param list   物品列表
      */
     fun Player.addItem(list: MutableList<ItemStack>) {
-        if (!player.isOnline || list.isEmpty()) {
-            return
-        }
-        // 解决堆叠超过上限的问题
-        for (itemStack in list) {
-            if (itemStack.isAir) {
-                continue
-            }
-            var amount = itemStack.amount
-            while (amount > 0) {
-                val itemClone = itemStack.clone()
-                itemClone.amount = min(amount, itemClone.maxStackSize)
-                amount -= itemClone.amount
-                player.giveItem(itemClone)
-            }
-        }
+        list.forEach { addItem(it) }
     }
 }

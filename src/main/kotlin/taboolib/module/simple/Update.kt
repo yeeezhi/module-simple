@@ -23,7 +23,7 @@ object Update {
         val version = pluginInfo.getString("version")!!
         val url = pluginInfo.getString("url")!!
         val update = pluginInfo.getStringList("update")
-        if (StringUtil.compareVersion(bukkitPlugin.description.version, version) > 0) {
+        if (StringUtil.compareVersion(bukkitPlugin.description.version, version) >= 0) {
             return
         }
         val prefix = config.getString("message.prefix")!!.replaceWithOrder(bukkitPlugin.name)
