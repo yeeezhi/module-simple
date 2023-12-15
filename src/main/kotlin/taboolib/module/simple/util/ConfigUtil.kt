@@ -1,11 +1,20 @@
 package taboolib.module.simple.util
 
+import org.bukkit.configuration.file.YamlConfiguration
 import taboolib.module.configuration.ConfigSection
 import taboolib.module.configuration.Configuration
 import taboolib.platform.util.bukkitPlugin
 import java.io.InputStreamReader
 
 object ConfigUtil {
+    /**
+     * 获取路径下Section的keys
+     * @param path 路径
+     */
+    fun Configuration.keys(path: String): Set<String> {
+        val yaml = YamlConfiguration.loadConfiguration(this.file!!)
+        return yaml.getConfigurationSection(path)?.getKeys(false) ?: setOf()
+    }
     /**
      * 配置文件补全,移除多余参数
      */

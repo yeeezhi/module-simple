@@ -9,6 +9,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import taboolib.module.simple.event.AttributeUpdateEvent
+import taboolib.platform.util.bukkitPlugin
 
 object AttributePlus3Listener {
     /**
@@ -25,7 +26,7 @@ object AttributePlus3Listener {
             val player = entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
             attributeUpdateEvent.call()
-            AttributeAPI.addSourceAttribute(event.attributeData, "SimpleLib", attributeUpdateEvent.playerLores)
+            AttributeAPI.addSourceAttribute(event.attributeData, bukkitPlugin.name, attributeUpdateEvent.playerLores)
         }
     }
 }
