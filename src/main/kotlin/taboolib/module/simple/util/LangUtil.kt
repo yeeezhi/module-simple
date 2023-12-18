@@ -2,6 +2,7 @@ package taboolib.module.simple.util
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import taboolib.common.platform.ProxyPlayer
 import taboolib.common.util.asList
 import taboolib.module.chat.colored
 import taboolib.module.configuration.Config
@@ -51,6 +52,26 @@ object LangUtil {
      */
     @JvmStatic
     fun CommandSender.sendLang(key: String, vararg args: Any) {
+        this.sendMessage(getLang(key, *args))
+    }
+    /**
+     * 发送消息
+     *
+     * @param key config
+     */
+    @JvmStatic
+    fun ProxyPlayer.sendLang(key: String) {
+        this.sendMessage(getLang(key))
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param key config
+     * @param args    占位符替换值
+     */
+    @JvmStatic
+    fun ProxyPlayer.sendLang(key: String, vararg args: Any) {
         this.sendMessage(getLang(key, *args))
     }
 
