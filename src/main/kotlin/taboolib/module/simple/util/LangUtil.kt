@@ -54,6 +54,7 @@ object LangUtil {
     fun CommandSender.sendLang(key: String, vararg args: Any) {
         this.sendMessage(getLang(key, *args))
     }
+
     /**
      * 发送消息
      *
@@ -110,7 +111,7 @@ object LangUtil {
      * @param args    占位符替换值
      * @return 格式化后的消息
      */
-    private fun format(message: String, vararg args: Any): String {
+    fun format(message: String, vararg args: Any): String {
         var format = message
         for ((i, arg) in args.asList().withIndex()) {
             format = format.replace("{$i}", arg)
