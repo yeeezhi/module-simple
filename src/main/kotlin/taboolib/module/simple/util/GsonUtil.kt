@@ -4,14 +4,16 @@ package taboolib.module.simple.util
 
 import com.google.gson.GsonBuilder
 import taboolib.common.Isolated
-import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-@RuntimeDependencies(
-    RuntimeDependency("com.google.code.gson:gson:2.10.1", test = "com.google.gson.Gson")
+@RuntimeDependency(
+    value = "com.google.code.gson:gson:2.10.1",
+    test = "com.google.gson_2_10_1.Gson",
+    relocate = ["!com.google.gson", "!com.google.gson_2_10_1"],
+    transitive = false
 )
 object GsonUtil {
     val gson = GsonBuilder().setPrettyPrinting().create()
@@ -29,9 +31,13 @@ object GsonUtil {
             }
             this.createNewFile()
         }
-        val writer = FileWriter(this)
-        writer.write(gson.toJson(any))
-        writer.close()
+        FileWriter(this).use { writer ->
+            var data = gson.toJson(any)
+            if (data.isEmpty()) {
+                data = "{}"
+            }
+            writer.write(data)
+        }
     }
 
     /**
