@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.google.code.gson:gson:2.8.9")
+    compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("io.izzel.taboolib:common:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-configuration:$taboolibVersion")

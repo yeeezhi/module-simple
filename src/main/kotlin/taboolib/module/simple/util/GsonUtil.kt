@@ -11,7 +11,7 @@ import java.io.FileReader
 import java.io.FileWriter
 
 @RuntimeDependencies(
-    RuntimeDependency("com.google.code.gson:gson:2.8.9", test = "com.google.gson.Gson")
+    RuntimeDependency("com.google.code.gson:gson:2.10.1", test = "com.google.gson.Gson")
 )
 object GsonUtil {
     val gson = GsonBuilder().setPrettyPrinting().create()
@@ -43,7 +43,7 @@ object GsonUtil {
         val data = fileReader.readText()
         fileReader.close()
         if (data.isEmpty()) {
-            throw Error("file content cannot be empty ${this.path}")
+            error("file content cannot be empty ${this.path}")
         }
         return gson.fromJson(data, classOfT)
     }
