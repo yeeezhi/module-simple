@@ -75,7 +75,7 @@ object ItemLoreOriginListener {
             managers.add(ItemLoreManager(player))
         }
         val attributeUpdateEvent = AttributeUpdateEvent(player)
-
+        attributeUpdateEvent.call()
         handleAttribute(player, managers, attributeUpdateEvent.playerLores)
     }
 
