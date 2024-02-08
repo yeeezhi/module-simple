@@ -1,12 +1,12 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.22"
 
 }
 
 group = "me.qingshou.taboolib"
-version = "1.0.0"
+version = "1.0.1"
 var taboolibVersion = "6.0.12-15"
 repositories {
     mavenLocal()
@@ -59,6 +59,13 @@ publishing {
                 username = mavenUsername.toString()
                 password = mavenPassword.toString()
             }
+        }
+    }
+}
+kotlin {
+    sourceSets.all {
+        languageSettings {
+            languageVersion = "2.0"
         }
     }
 }
