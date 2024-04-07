@@ -29,7 +29,7 @@ object AttributePlus2Listener {
             val attributeUpdateEvent = AttributeUpdateEvent(player)
             attributeUpdateEvent.call()
             Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
-            AttributeAPI.addAttribute(player, bukkitPlugin.name, attributeUpdateEvent.playerLores)
+            AttributeAPI.addAttribute(player, bukkitPlugin.name, attributeUpdateEvent.getLores())
         }
     }
 }

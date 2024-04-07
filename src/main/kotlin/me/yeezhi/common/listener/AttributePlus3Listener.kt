@@ -26,7 +26,7 @@ object AttributePlus3Listener {
             val player = entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
             attributeUpdateEvent.call()
-            AttributeAPI.addSourceAttribute(event.attributeData, bukkitPlugin.name, attributeUpdateEvent.playerLores)
+            AttributeAPI.addSourceAttribute(event.attributeData, bukkitPlugin.name, attributeUpdateEvent.getLores())
         }
     }
 }

@@ -27,7 +27,7 @@ object SXAttributeListener {
             val player = event.entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
             attributeUpdateEvent.call()
-            val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.playerLores)
+            val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.getLores())
             SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
         }
     }
