@@ -111,42 +111,41 @@ class AttributeUpdateEvent(val player: Player) : BukkitProxyEvent() {
         attributeMap.remove(pluginName)
     }
 
-    private val playerItemStacks: List<ItemStack>
-        /**
-         * 获取玩家属性物品
-         *
-         * @return 属性物品列表
-         */
-        get() {
-            val itemStackList: MutableList<ItemStack> = ArrayList()
-            for (itemStacks in attributeMap.values) {
-                for (itemStack in itemStacks) {
-                    if (itemStack.type == Material.AIR) {
-                        continue
-                    }
-                    if (itemStack.itemMeta == null) {
-                        continue
-                    }
-                    if (itemStack.itemMeta!!.lore == null) {
-                        continue
-                    }
-                    if (ItemUtil.getItemLevel(itemStack) > player.level) {
-                        continue
-                    }
-                    itemStackList.add(itemStack)
+    /**
+     * 获取玩家属性物品
+     *
+     * @return 属性物品列表
+     */
+    fun getItemStacks(): List<ItemStack> {
+        val itemStackList: MutableList<ItemStack> = ArrayList()
+        for (itemStacks in attributeMap.values) {
+            for (itemStack in itemStacks) {
+                if (itemStack.type == Material.AIR) {
+                    continue
                 }
+                if (itemStack.itemMeta == null) {
+                    continue
+                }
+                if (itemStack.itemMeta!!.lore == null) {
+                    continue
+                }
+                if (ItemUtil.getItemLevel(itemStack) > player.level) {
+                    continue
+                }
+                itemStackList.add(itemStack)
             }
-            return itemStackList
         }
-    val playerLores: List<String>
-        /**
-         * 获取玩家属性Lore列表
-         *
-         * @return 属性物品列表
-         */
-        get() {
-            val loreList: MutableList<String> = ArrayList()
-            playerItemStacks.forEach(Consumer { itemStack: ItemStack -> loreList.addAll(itemStack.clone().getLore()) })
-            return loreList
-        }
+        return itemStackList
+    }
+
+    /**
+     * 获取玩家属性Lore列表
+     *
+     * @return 属性物品列表
+     */
+    fun getLores(): List<String> {
+        val loreList: MutableList<String> = ArrayList()
+        getItemStacks().forEach { itemStack: ItemStack -> loreList.addAll(itemStack.clone().getLore()) }
+        return loreList
+    }
 }
