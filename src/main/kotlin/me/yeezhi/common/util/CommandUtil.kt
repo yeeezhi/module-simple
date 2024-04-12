@@ -2,6 +2,7 @@ package me.yeezhi.common.util
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import taboolib.common.platform.function.submit
 import taboolib.platform.compat.replacePlaceholder
 import java.util.function.Consumer
 
@@ -16,7 +17,9 @@ object CommandUtil {
      * @param commands 指令列表
      */
     fun dispatchCommand(player: Player, commands: List<String>) {
-        commands.forEach(Consumer { command: String -> dispatchCommand(player, command) })
+        submit {
+            commands.forEach(Consumer { command: String -> dispatchCommand(player, command) })
+        }
     }
 
     /**
@@ -48,6 +51,8 @@ object CommandUtil {
             player.isOp = false
             return
         }
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)
+        submit {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)
+        }
     }
 }

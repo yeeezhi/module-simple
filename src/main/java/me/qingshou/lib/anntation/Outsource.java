@@ -1,4 +1,4 @@
-package me.yeezhi.lib.anntation;
+package me.qingshou.lib.anntation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
