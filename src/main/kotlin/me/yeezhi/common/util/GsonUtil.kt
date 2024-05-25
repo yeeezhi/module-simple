@@ -8,6 +8,7 @@ import taboolib.common.env.RuntimeDependency
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.lang.reflect.Type
 
 @RuntimeDependency(
     value = "com.google.code.gson:gson:2.10.1",
@@ -58,4 +59,5 @@ object GsonUtil {
     fun <T> String.toAny(classOfT: Class<T>): T {
         return gson.fromJson(this, classOfT)
     }
+
 }

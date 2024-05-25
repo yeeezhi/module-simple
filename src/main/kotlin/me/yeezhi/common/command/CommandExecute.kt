@@ -57,8 +57,8 @@ class CommandExecute(name: String) : Command(name) {
             } else {
                 invokeMethod.invoke(subCommand)
             }
-        } catch (var11: Exception) {
-            throw RuntimeException(var11)
+        } catch (exception: Exception) {
+            throw RuntimeException(exception)
         }
         return true
     }

@@ -49,7 +49,7 @@ object MythicMobsUtil {
      * @return 物品
      */
     fun getItem(itemName: String, amount: Int): ItemStack? {
-        var itemStack: ItemStack?
+        val itemStack: ItemStack?
         try {
             if (map.containsKey(itemName)) {
                 itemStack = map[itemName]!!.clone()
@@ -62,9 +62,9 @@ object MythicMobsUtil {
                 itemStack.amount = amount
                 map[itemName] = itemStack
             }
+            return itemStack
         } catch (exception: Exception) {
             throw RuntimeException("item acquisition failed", exception)
         }
-        return itemStack
     }
 }
