@@ -17,7 +17,7 @@ import java.lang.reflect.Type
     transitive = false
 )
 object GsonUtil {
-    val gson = GsonBuilder().setPrettyPrinting().create()
+    var gson = GsonBuilder().setPrettyPrinting().create()
 
     /**
      * 实体序列化写入文件

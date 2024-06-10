@@ -5,7 +5,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.function.info
 import taboolib.platform.util.bukkitPlugin
 
-object Show {
+object Plugin {
     @Awake(LifeCycle.ENABLE)
     fun showEnable() {
         info("-------------------------------------------------------------------------")
