@@ -21,13 +21,8 @@ object ResourceUtil {
             return
         }
         val folder = File(this.dataFolder, folderName)
-        var charset = "US-ASCII"
-        var vTmp = this.server.bukkitVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-        vTmp = if (vTmp.contains("-")) vTmp.split("\\-".toRegex()).dropLastWhile { it.isEmpty() }
-            .toTypedArray()[0] else vTmp
-        if (vTmp.toInt() > 8) {
-            charset = "UTF-8"
-        }
+        val charset = "UTF-8"
+
         if (folder.exists()) {
             return
         }
