@@ -3,6 +3,7 @@ package me.yeezhi.common.listener
 import github.saukiya.sxattribute.SXAttribute
 import github.saukiya.sxattribute.event.SXLoadItemDataEvent
 import me.yeezhi.common.event.AttributeUpdateEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
@@ -26,7 +27,7 @@ object SXAttributeListener {
         submit {
             val player = event.entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
-            attributeUpdateEvent.call()
+            Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
             val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.getLores())
             SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
         }

@@ -5,6 +5,7 @@ import com.mchim.ItemLoreOrigin.Event.ItemLoreStatusEvent
 import com.mchim.ItemLoreOrigin.Event.ItemLoreTickEvent
 import com.mchim.ItemLoreOrigin.ItemLoreData.ItemLoreManager
 import me.yeezhi.common.event.AttributeUpdateEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Ghost
@@ -68,7 +69,7 @@ object ItemLoreOriginListener {
             managers.add(ItemLoreManager(player))
         }
         val attributeUpdateEvent = AttributeUpdateEvent(player)
-        attributeUpdateEvent.call()
+        Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
         handleAttribute(managers, attributeUpdateEvent.getItemStacks())
     }
 

@@ -1,6 +1,7 @@
 package me.yeezhi.common.listener
 
 import me.yeezhi.common.event.AttributeUpdateEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.serverct.ersha.api.AttributeAPI
@@ -25,7 +26,7 @@ object AttributePlus3Listener {
             val entity: Entity = event.attributeData.getEntity() as? Player ?: return@submit
             val player = entity as Player
             val attributeUpdateEvent = AttributeUpdateEvent(player)
-            attributeUpdateEvent.call()
+            Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
             AttributeAPI.addSourceAttribute(event.attributeData, bukkitPlugin.name, attributeUpdateEvent.getLores())
         }
     }

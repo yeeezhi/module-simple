@@ -4,11 +4,12 @@ import me.yeezhi.common.util.ItemUtil
 import me.yeezhi.common.util.ItemUtil.getLore
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
+import org.bukkit.event.HandlerList
 import org.bukkit.inventory.ItemStack
-import taboolib.platform.type.BukkitProxyEvent
-import java.util.function.Consumer
 
-class AttributeUpdateEvent(val player: Player) : BukkitProxyEvent() {
+class AttributeUpdateEvent(val player: Player) : Event(true) {
+
     private val attributeMap: MutableMap<String, MutableList<ItemStack>> = HashMap()
 
     /**
@@ -147,5 +148,9 @@ class AttributeUpdateEvent(val player: Player) : BukkitProxyEvent() {
         val loreList: MutableList<String> = ArrayList()
         getItemStacks().forEach { itemStack: ItemStack -> loreList.addAll(itemStack.clone().getLore()) }
         return loreList
+    }
+
+    override fun getHandlers(): HandlerList {
+        return HandlerList()
     }
 }
