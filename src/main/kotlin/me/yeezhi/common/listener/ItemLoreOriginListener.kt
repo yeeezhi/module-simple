@@ -5,12 +5,7 @@ import com.mchim.ItemLoreOrigin.Event.ItemLoreStatusEvent
 import com.mchim.ItemLoreOrigin.Event.ItemLoreTickEvent
 import com.mchim.ItemLoreOrigin.ItemLoreData.ItemLoreManager
 import me.yeezhi.common.api.AttributeAPI.getAttributeItems
-import me.yeezhi.common.event.AttributeUpdateEvent
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
