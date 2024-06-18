@@ -4,9 +4,12 @@ import com.mchim.ItemLoreOrigin.Event.ItemLoreDamageEvent
 import com.mchim.ItemLoreOrigin.Event.ItemLoreStatusEvent
 import com.mchim.ItemLoreOrigin.Event.ItemLoreTickEvent
 import com.mchim.ItemLoreOrigin.ItemLoreData.ItemLoreManager
+import me.yeezhi.common.api.AttributeAPI.getAttributeItems
 import me.yeezhi.common.event.AttributeUpdateEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
@@ -68,21 +71,7 @@ object ItemLoreOriginListener {
         if (managers.size == 0) {
             managers.add(ItemLoreManager(player))
         }
-        val attributeUpdateEvent = AttributeUpdateEvent(player)
-        Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
-        handleAttribute(managers, attributeUpdateEvent.getItemStacks())
-    }
-
-    /**
-     * 处理ilo属性
-     * 一般在ItemLoreStatusEvent,ItemLoreDamageEvent,ItemLoreTickEvent触发时使用
-     *
-     * @param player    玩家
-     * @param managers  事件中获取
-     * @param loreList 生效的属性Lore
-     */
-    private fun handleAttribute(managers: List<ItemLoreManager>, itemStacks: List<ItemStack>) {
         val ilm = managers[0]
-        itemStacks.forEach { itemStack -> ilm.initLoreData(itemStack) }
+        player.getAttributeItems().forEach { itemStack -> ilm.initLoreData(itemStack) }
     }
 }

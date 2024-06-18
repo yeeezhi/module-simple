@@ -2,13 +2,11 @@ package me.yeezhi.common.listener
 
 import github.saukiya.sxattribute.SXAttribute
 import github.saukiya.sxattribute.event.SXLoadItemDataEvent
-import me.yeezhi.common.event.AttributeUpdateEvent
-import org.bukkit.Bukkit
+import me.yeezhi.common.api.AttributeAPI.getAttributeLores
 import org.bukkit.entity.Player
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.submit
 
 object SXAttributeListener {
     /**
@@ -23,13 +21,8 @@ object SXAttributeListener {
         if (event.entity !is Player) {
             return
         }
-        // 主线程执行
-        submit {
-            val player = event.entity as Player
-            val attributeUpdateEvent = AttributeUpdateEvent(player)
-            Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
-            val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, attributeUpdateEvent.getLores())
-            SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
-        }
+        val player = event.entity as Player
+        val sxAttributeData = SXAttribute.getApi().getLoreData(player, null, player.getAttributeLores())
+        SXAttribute.getApi().setEntityAPIData(SXAttributeListener::class.java, player.uniqueId, sxAttributeData)
     }
 }

@@ -3,8 +3,7 @@ package me.yeezhi.common.listener
 import ac.github.oa.api.OriginAttributeAPI
 import ac.github.oa.api.event.entity.EntityLoadEquipmentEvent
 import ac.github.oa.internal.core.attribute.AttributeData
-import me.yeezhi.common.event.AttributeUpdateEvent
-import org.bukkit.Bukkit
+import me.yeezhi.common.api.AttributeAPI.getAttributeLores
 import org.bukkit.entity.Player
 import taboolib.common.platform.Ghost
 import taboolib.common.platform.event.EventPriority
@@ -24,9 +23,7 @@ object OriginAttributeListener {
             return
         }
         val player = event.livingEntity as Player
-        val attributeUpdateEvent = AttributeUpdateEvent(player)
-        Bukkit.getServer().pluginManager.callEvent(attributeUpdateEvent)
-        val attributeData: AttributeData = OriginAttributeAPI.loadList(attributeUpdateEvent.getLores())
+        val attributeData: AttributeData = OriginAttributeAPI.loadList(player, player.getAttributeLores())
         OriginAttributeAPI.setExtra(player.uniqueId, bukkitPlugin.name, attributeData)
         OriginAttributeAPI.callUpdate(player)
     }
