@@ -7,7 +7,7 @@ plugins {
 
 group = "me.yeezhi.taboolib"
 version = "1.0.4"
-var taboolibVersion = "6.0.12-15"
+var taboolibVersion = "6.0.12-69"
 repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/repository/public")
