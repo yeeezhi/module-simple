@@ -36,6 +36,7 @@ object GsonUtil {
         if (data.isEmpty()) {
             data = "{}"
         }
+
         FileWriter(this).use { writer -> writer.write(data) }
     }
 
