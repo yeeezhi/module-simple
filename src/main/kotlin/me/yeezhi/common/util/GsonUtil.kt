@@ -24,19 +24,23 @@ object GsonUtil {
      * @param any 实体
      */
     fun File.writerAny(any: Any) {
-        if (!this.exists()) {
-            val fileParent: File = this.getParentFile()
-            if (!fileParent.exists()) {
-                fileParent.mkdirs()
+        try {
+            if (!this.exists()) {
+                val fileParent: File = this.getParentFile()
+                if (!fileParent.exists()) {
+                    fileParent.mkdirs()
+                }
+                this.createNewFile()
             }
-            this.createNewFile()
-        }
-        var data = gson.toJson(any)
-        if (data.isEmpty()) {
-            data = "{}"
-        }
+            var data = gson.toJson(any)
+            if (data.isEmpty()) {
+                data = "{}"
+            }
 
-        FileWriter(this).use { writer -> writer.write(data) }
+            FileWriter(this).use { writer -> writer.write(data) }
+        } catch (e: Exception) {
+            throw RuntimeException("文件 ${this.absolutePath} 写入失败", e)
+        }
     }
 
     /**
@@ -44,12 +48,16 @@ object GsonUtil {
      *
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
-        val fileReader = FileReader(this)
-        val data = fileReader.use { reader -> reader.readText() }
-        if (data.isEmpty()) {
-            error("file content cannot be empty ${this.path}")
+        try {
+            val fileReader = FileReader(this)
+            val data = fileReader.use { reader -> reader.readText() }
+            if (data.isEmpty()) {
+                error("file content cannot be empty ${this.path}")
+            }
+            return gson.fromJson(data, classOfT)
+        } catch (e: Exception) {
+            throw RuntimeException("文件 ${this.absolutePath} 读取失败", e)
         }
-        return gson.fromJson(data, classOfT)
     }
 
     fun Any.toJSONString(): String {
