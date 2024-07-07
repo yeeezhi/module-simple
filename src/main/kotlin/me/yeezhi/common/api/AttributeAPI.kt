@@ -1,9 +1,9 @@
 package me.yeezhi.common.api
 
-import me.yeezhi.common.util.ItemUtil.getLore
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.platform.util.ItemBuilder
 import taboolib.platform.util.buildItem
 import java.util.*
 
@@ -56,7 +56,7 @@ object AttributeAPI {
      */
     fun Player.getAttributeLores(): MutableList<String> {
         val map = attributeMap[this.uniqueId] ?: return mutableListOf()
-        return map.flatMap { it.getLore() }.toMutableList()
+        return map.flatMap { ItemBuilder(it).lore }.toMutableList()
     }
 }
 
