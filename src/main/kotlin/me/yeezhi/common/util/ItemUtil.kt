@@ -1,16 +1,11 @@
 package me.yeezhi.common.util
 
-import me.yeezhi.common.util.ItemUtil.getLore
-import me.yeezhi.common.util.ItemUtil.setLore
-import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 import taboolib.platform.util.ItemBuilder
-import taboolib.platform.util.hasLore
 import taboolib.platform.util.isAir
 import java.util.*
 
@@ -78,7 +73,6 @@ object ItemUtil {
     }
 
 
-
     /**
      * 合并物品数量
      * 将不同堆里面的物品合并数量
@@ -87,18 +81,21 @@ object ItemUtil {
      * @return 合并后的物品列表
      */
 
-    fun  List<ItemStack>.arrange(): MutableList<ItemStack> {
+    fun List<ItemStack>.arrange(): MutableList<ItemStack> {
         val list: MutableList<ItemStack> = ArrayList()
-        this.forEach f1@{
-            if (it.isAir){
-                return@f1
+        for (item in this) {
+            if (item.type == Material.AIR) {
+                continue
             }
-            val itemStack = it.clone()
+            val itemStack = item.clone()
+            var add = true
             for (itemStack1 in list) {
                 if (itemStack.isSimilar(itemStack1)) {
                     itemStack1.amount += itemStack.amount
-                    return@f1
+                    add = false
                 }
+            }
+            if (add) {
                 list.add(itemStack)
             }
         }
