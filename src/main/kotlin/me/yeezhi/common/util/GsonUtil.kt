@@ -8,6 +8,7 @@ import taboolib.common.env.RuntimeDependency
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.io.InputStreamReader
 
 @RuntimeDependency(
     value = "com.google.code.gson:gson:2.10.1",
@@ -49,8 +50,11 @@ object GsonUtil {
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
         try {
-            val fileReader = FileReader(this)
-            val data = fileReader.use { reader -> reader.readText() }
+            val data = this.inputStream().use { inputStream ->
+                InputStreamReader(inputStream, "UTF-8").use { reader ->
+                    reader.readText()
+                }
+            }
             if (data.isEmpty()) {
                 error("file content cannot be empty ${this.path}")
             }

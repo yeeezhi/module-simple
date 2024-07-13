@@ -1,4 +1,4 @@
-package me.yeezhi.common.util
+package me.yeezhi.common
 
 import taboolib.common.platform.function.info
 import taboolib.module.configuration.Config

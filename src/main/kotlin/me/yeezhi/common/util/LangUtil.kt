@@ -100,24 +100,31 @@ object LangUtil {
     @JvmStatic
     fun getLang(key: String, vararg args: Any, prefix: Boolean = true): String {
         return if (prefix) {
-            format((message.getString("prefix") + message.getString(key, key)).colored(), *args)
+            (message.getString("prefix") + message.getString(key, key)).format(*args).colored()
         } else {
-            format(message.getString(key, key)!!.colored(), *args)
+            message.getString(key, key)!!.format(*args).colored()
         }
     }
 
-    /**
-     * 格式化消息
-     *
-     * @param message 消息
-     * @param args    占位符替换值
-     * @return 格式化后的消息
-     */
-    fun format(message: String, vararg args: Any): String {
-        var format = message
-        for ((i, arg) in args.asList().withIndex()) {
-            format = format.replace("{$i}", arg)
-        }
-        return format
+
+}
+
+val prefix: String
+    get() {
+        return LangUtil.message.getString("prefix")!!
     }
+
+
+/**
+ * 格式化消息
+ *
+ * @param args    占位符替换值
+ * @return 格式化后的消息
+ */
+fun String.format(vararg args: Any): String {
+    var format = this
+    for ((i, arg) in args.asList().withIndex()) {
+        format = format.replace("{$i}", arg)
+    }
+    return format
 }

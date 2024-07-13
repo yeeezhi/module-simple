@@ -3,20 +3,23 @@ package me.yeezhi.common.util
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
-import taboolib.module.configuration.Config
-import taboolib.module.configuration.Configuration
-import taboolib.platform.util.ItemBuilder
+import taboolib.platform.util.deserializeToItemStack
 import taboolib.platform.util.isAir
+import taboolib.platform.util.serializeToByteArray
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 /**
  * 物品工具
  */
 object ItemUtil {
+    fun String.deserializeToItemStack(): ItemStack {
+        return Base64.getDecoder().decode(this).deserializeToItemStack()
+    }
 
-    @Config("config.yml")
-    lateinit var config: Configuration
-        private set
+    fun ItemStack.serializeToBase64(): String {
+        return Base64.getEncoder().encode(this.serializeToByteArray()).toString(StandardCharsets.UTF_8)
+    }
 
     /**
      * 获取物品Lore列表
@@ -25,7 +28,12 @@ object ItemUtil {
      */
 
     fun ItemStack.getLore(): MutableList<String> {
-        return ItemBuilder(this).lore
+        if (this.isAir) {
+            return mutableListOf()
+        }
+        return if (this.itemMeta.lore == null) {
+            mutableListOf()
+        } else this.itemMeta.lore
     }
 
     /**
