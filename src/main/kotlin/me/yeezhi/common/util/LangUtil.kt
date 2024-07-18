@@ -7,6 +7,7 @@ import taboolib.common.util.asList
 import taboolib.module.chat.colored
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
+import taboolib.platform.compat.replacePlaceholder
 
 object LangUtil {
     @Config("message.yml", autoReload = true)
@@ -20,7 +21,7 @@ object LangUtil {
      */
     @JvmStatic
     fun Player.sendLang(key: String) {
-        this.sendMessage(getLang(key))
+        this.sendMessage(getLang(key).replacePlaceholder(this))
     }
 
     /**
@@ -31,7 +32,7 @@ object LangUtil {
      */
     @JvmStatic
     fun Player.sendLang(key: String, vararg args: Any) {
-        this.sendMessage(getLang(key, * args))
+        this.sendMessage(getLang(key, * args).replacePlaceholder(this))
     }
 
     /**
