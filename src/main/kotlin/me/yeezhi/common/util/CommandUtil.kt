@@ -16,9 +16,10 @@ object CommandUtil {
      * @param player   玩家
      * @param commands 指令列表
      */
-    fun dispatchCommand(player: Player, commands: List<String>) {
+    fun Player.dispatchCommand(commands: List<String>) {
+        val player = this
         submit {
-            commands.forEach(Consumer { command: String -> dispatchCommand(player, command) })
+            commands.forEach(Consumer { command: String -> player.dispatchCommand(command) })
         }
     }
 
@@ -26,10 +27,10 @@ object CommandUtil {
      * 执行指令,支持颜色代码,支持PAPI变量
      * 前缀 默认后台执行, player: 玩家执行,op: 玩家以OP权限执行
      *
-     * @param player  玩家
      * @param command 指令
      */
-    fun dispatchCommand(player: Player, command: String) {
+    fun Player.dispatchCommand(command: String) {
+        val player = this
         var command = command
         command = command.replacePlaceholder(player)
         if (command.startsWith("player:")) {
