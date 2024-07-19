@@ -1,6 +1,5 @@
 package me.yeezhi.common.util
 
-import me.yeezhi.common.util.StringUtil.isNotEmpty
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -174,7 +173,7 @@ object HttpUtil {
             conn = getConnection(URL(url), method, requestType)
             conn.setConnectTimeout(timeout)
             conn.setReadTimeout(READ_TIMEOUT)
-            if (isNotEmpty(requestContent)) {
+            if (requestContent.isNotEmpty()) {
                 out = conn.outputStream
                 out.write(requestContent.toByteArray(charset(CHARSET)))
             }

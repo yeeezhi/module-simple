@@ -1,33 +1,29 @@
 package me.yeezhi.common.util
 
-import java.util.*
 import java.util.regex.Pattern
-import java.util.stream.Collectors
-import kotlin.math.min
 
 /**
  * 字符串工具
  */
 object StringUtil {
     /**
-     * 是否为空
-     *
-     * @param str 字符串
-     * @return true/是
+     * 字符串替换占位符
+     * @param placeholder 占位符数据
      */
-    fun isEmpty(str: CharSequence?): Boolean {
-        return str.isNullOrEmpty()
+    fun String.replace(placeholder: MutableMap<String, String>): String {
+        var str = this
+        placeholder.forEach { (key, value) -> str = str.replace(key, value) }
+        return str
     }
 
     /**
-     * 是否不为空
-     *
-     * @param str 字符串
-     * @return true/是
+     * 字符串替换占位符
+     * @param placeholder 占位符数据
      */
-    fun isNotEmpty(str: CharSequence?): Boolean {
-        return !isEmpty(str)
+    fun List<String>.replace(placeholder: MutableMap<String, String>): List<String> {
+        return this.map { it.replace(placeholder) }
     }
+
 
     /**
      * 获得字符串中的数值
@@ -50,134 +46,4 @@ object StringUtil {
         return Pattern.compile("\\d*").matcher(str).matches()
     }
 
-    /**
-     * 转换小写
-     *
-     * @param str 字符串
-     * @return 小写字符串
-     */
-    fun toLowerCase(str: String?): String? {
-        return str?.lowercase(Locale.getDefault())
-    }
-
-    /**
-     * 将#替换成空格
-     *
-     * @param str 字符串
-     * @return 替换后的字符串
-     */
-    fun replaceSpace(str: String): String {
-        return if (isEmpty(str)) {
-            str
-        } else str.replace("#", " ")
-    }
-
-    /**
-     * 字符串转集合
-     *
-     * @param str 字符串
-     * @return 集合
-     */
-    fun strToStrList(str: String): List<String> {
-        val list: List<String> = ArrayList()
-        return if (isEmpty(str)) {
-            list
-        } else Arrays.stream(str.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-            .map { obj: String -> obj.trim { it <= ' ' } }.collect(Collectors.toList())
-    }
-
-    /**
-     * 字符串转集合
-     *
-     * @param str 字符串
-     * @return 集合
-     */
-    fun strToLongList(str: String): List<Long> {
-        val list: List<Long> = ArrayList()
-        return if (isEmpty(str)) {
-            list
-        } else Arrays.stream(str.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-            .map { s: String -> s.trim { it <= ' ' }.toLong() }.collect(Collectors.toList())
-    }
-
-    /**
-     * 字符串转集合
-     *
-     * @param str 字符串
-     * @return 集合
-     */
-    fun strToIntList(str: String): List<Int> {
-        val list: List<Int> = ArrayList()
-        return if (isEmpty(str)) {
-            list
-        } else Arrays.stream(str.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-            .map { s: String -> s.trim { it <= ' ' }.toInt() }.collect(Collectors.toList())
-    }
-
-    /**
-     * 去除字符串中所有的空白符
-     *
-     * @param str 字符串
-     * @return 新字符串
-     * @since 3.1.0
-     */
-    fun deleteWhitespace(str: String): String {
-        if (isEmpty(str)) {
-            return str
-        }
-        val sz = str.length
-        val chs = CharArray(sz)
-        var count = 0
-        for (i in 0 until sz) {
-            if (!Character.isWhitespace(str[i])) {
-                chs[count++] = str[i]
-            }
-        }
-        return if (count == sz) {
-            str
-        } else {
-            String(chs, 0, count)
-        }
-    }
-
-    /**
-     * 版本比较
-     *
-     * @param version1 当前版本
-     * @param version2 要求版本
-     * @return 0 等于,-1小于,1大于
-     */
-    fun compareVersion(version1: String, version2: String): Int {
-        if (version1 == version2) {
-            return 0
-        }
-        val version1Array = version1.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val version2Array = version2.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        var index = 0
-        //获取最小长度值
-        val minLen = min(version1Array.size.toDouble(), version2Array.size.toDouble()).toInt()
-        var diff = 0
-        //循环判断每位的大小
-        while (index < minLen && (version1Array[index].toInt() - version2Array[index].toInt()).also {
-                diff = it
-            } == 0) {
-            index++
-        }
-        return if (diff == 0) {
-            //如果位数不一致，比较多余位数
-            for (i in index until version1Array.size) {
-                if (version1Array[i].toInt() > 0) {
-                    return 1
-                }
-            }
-            for (i in index until version2Array.size) {
-                if (version2Array[i].toInt() > 0) {
-                    return -1
-                }
-            }
-            0
-        } else {
-            if (diff > 0) 1 else -1
-        }
-    }
 }

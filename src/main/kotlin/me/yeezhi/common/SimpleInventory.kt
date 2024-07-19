@@ -11,7 +11,7 @@ open class SimpleInventory {
     var backPage = true
 
     // GUI内部占位符
-    var placeholder: MutableMap<String, Any> = mutableMapOf()
+    var placeholder: MutableMap<String, String> = mutableMapOf()
 
 
     /**
@@ -60,14 +60,6 @@ open class SimpleInventory {
         }
     }
 
-    /**
-     * 字符串替换占位符
-     * @param placeholder 占位符数据
-     */
-    fun String.replace(placeholder: MutableMap<String, Any>): String {
-        var str = this
-        placeholder.forEach { (key, value) -> str = str.replace(key, value.toString()) }
-        return str
-    }
+
 }
 
