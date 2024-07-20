@@ -6,9 +6,6 @@ import com.google.gson.GsonBuilder
 import taboolib.common.Isolated
 import taboolib.common.env.RuntimeDependency
 import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.InputStreamReader
 
 @RuntimeDependency(
     value = "com.google.code.gson:gson:2.10.1",
@@ -37,8 +34,7 @@ object GsonUtil {
             if (data.isEmpty()) {
                 data = "{}"
             }
-
-            FileWriter(this).use { writer -> writer.write(data) }
+            this.writeText(data, Charsets.UTF_8)
         } catch (e: Exception) {
             throw RuntimeException("文件 ${this.absolutePath} 写入失败", e)
         }
@@ -50,14 +46,11 @@ object GsonUtil {
      */
     fun <T> File.readAny(classOfT: Class<T>): T {
         try {
-            val data = this.inputStream().use { inputStream ->
-                InputStreamReader(inputStream, "UTF-8").use { reader ->
-                    reader.readText()
-                }
-            }
+            val data = this.readText(Charsets.UTF_8)
             if (data.isEmpty()) {
                 error("file content cannot be empty ${this.path}")
             }
+
             return gson.fromJson(data, classOfT)
         } catch (e: Exception) {
             throw RuntimeException("文件 ${this.absolutePath} 读取失败", e)
