@@ -33,7 +33,7 @@ object InventoryUtil {
             }
             volume += content.maxStackSize - content.amount
         }
-        volume += itemStack.type.maxStackSize * this.getEmptySlot()
+        volume += itemStack.type.maxStackSize * this.getEmptySlot(false)
         return volume
     }
 }
