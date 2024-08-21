@@ -6,8 +6,10 @@ import taboolib.common.platform.function.info
 import taboolib.platform.util.bukkitPlugin
 
 object Plugin {
+    var show = true
     @Awake(LifeCycle.ENABLE)
     fun showEnable() {
+        if (!show) return
         info("-------------------------------------------------------------------------")
         info("                   [" + bukkitPlugin.description.name + "] 插件载入成功!")
         info("                   感谢您对我的支持!")
@@ -20,6 +22,7 @@ object Plugin {
 
     @Awake(LifeCycle.DISABLE)
     fun showDisable() {
+        if (!show) return
         info("-------------------------------------------------------------------------")
         info("                   [" + bukkitPlugin.description.name + "] 插件卸载成功!")
         info("                   感谢您对我的支持!")

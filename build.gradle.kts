@@ -6,8 +6,8 @@ plugins {
 }
 
 group = "me.yeezhi.taboolib"
-version = "1.0.4"
-var taboolibVersion = "6.0.12-69"
+version = "1.0.5"
+var taboolibVersion = "6.1.2-beta10"
 repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/repository/public")
@@ -20,6 +20,11 @@ dependencies {
     compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-configuration:$taboolibVersion")
     compileOnly("io.izzel.taboolib:platform-bukkit:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:common-platform-api:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:common-util:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:common-env:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:module-bukkit-util:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:module-bukkit-hook:$taboolibVersion")
     compileOnly(fileTree("libs"))
 }
 

@@ -6,7 +6,7 @@ import taboolib.module.configuration.Configuration
 import taboolib.platform.util.bukkitPlugin
 import java.io.InputStreamReader
 
-object ConfigUtil {
+object ConfigurationUtil {
     /**
      * 获取路径下Section的keys
      * @param path 路径

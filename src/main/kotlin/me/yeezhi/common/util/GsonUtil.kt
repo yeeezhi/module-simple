@@ -1,9 +1,6 @@
-@file:Isolated
-
 package me.yeezhi.common.util
 
 import com.google.gson.GsonBuilder
-import taboolib.common.Isolated
 import taboolib.common.env.RuntimeDependency
 import java.io.File
 
