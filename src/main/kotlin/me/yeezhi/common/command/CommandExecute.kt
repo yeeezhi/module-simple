@@ -70,60 +70,60 @@ class CommandExecute(name: String) : Command(name) {
     }
 
     override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
-        if (args.size > 1) {
-            return tabComplete0(sender, alias, args, null)
-        }
+
         if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
             return tabComplete0(sender, alias, args, null)
         }
-        val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
-        val clazz: Class<*> = subCommand.javaClass
-        val methods = clazz.getMethods()
-        if (methods.isEmpty()) {
-            return tabComplete0(sender, alias, args, null)
+        if (args.size <= 1) {
+            val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
+            val clazz: Class<*> = subCommand.javaClass
+            val methods = clazz.getMethods()
+            if (methods.isEmpty()) {
+                return tabComplete0(sender, alias, args, null)
+            }
+            val methodList: MutableList<Method> = mutableListOf()
+            methods.forEach { method ->
+                if (method.getAnnotation(CommandBody::class.java) == null) {
+                    return@forEach
+                }
+                methodList.add(method)
+            }
+            // 排序指令
+            methodList.sortBy { it.getAnnotation(CommandBody::class.java).order }
+            val list: MutableList<String> = mutableListOf()
+            for (method in methodList) {
+                if (!method.isAnnotationPresent(CommandBody::class.java)) {
+                    continue
+                }
+                val commandBody = method.getAnnotation(CommandBody::class.java)
+                if (commandBody.hide) {
+                    continue
+                }
+                // 判断是否后台
+                if (!commandBody.canConsole && sender is ConsoleCommandSender) {
+                    continue
+                }
+                // 判断管理员
+                if (commandBody.needAdmin && !sender.isOp) {
+                    continue
+                }
+                // 判断权限
+                if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
+                    continue
+                }
+                val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
+                list.add(invokeName)
+            }
+            return list
         }
-        val methodList: MutableList<Method> = mutableListOf()
-        methods.forEach { method ->
-            if (method.getAnnotation(CommandBody::class.java) == null) {
-                return@forEach
-            }
-            methodList.add(method)
-        }
-        // 排序指令
-        methodList.sortBy { it.getAnnotation(CommandBody::class.java).order }
-        val list: MutableList<String> = mutableListOf()
-        for (method in methodList) {
-            if (!method.isAnnotationPresent(CommandBody::class.java)) {
-                continue
-            }
-            val commandBody = method.getAnnotation(CommandBody::class.java)
-            if (commandBody.hide) {
-                continue
-            }
-            // 判断是否后台
-            if (!commandBody.canConsole && sender is ConsoleCommandSender) {
-                continue
-            }
-            // 判断管理员
-            if (commandBody.needAdmin && !sender.isOp) {
-                continue
-            }
-            // 判断权限
-            if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
-                continue
-            }
-            val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
-            list.add(invokeName)
-        }
-        return list
+
+        return tabComplete0(sender, alias, args, null)
+
     }
 
     @Throws(IllegalArgumentException::class)
     fun tabComplete0(
-        sender: CommandSender,
-        alias: String,
-        args: Array<String>,
-        location: Location?
+        sender: CommandSender, alias: String, args: Array<String>, location: Location?
     ): List<String> {
         Validate.notNull(sender, "Sender cannot be null")
         Validate.notNull(args, "Arguments cannot be null")
