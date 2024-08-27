@@ -1,11 +1,17 @@
 package me.yeezhi.common.command
 
+import com.google.common.collect.ImmutableList
+import org.apache.commons.lang.Validate
+import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
+import org.bukkit.util.StringUtil
 import taboolib.common.platform.function.submitAsync
 import taboolib.platform.util.bukkitPlugin
+import java.lang.reflect.Method
+import java.util.*
 
 class CommandExecute(name: String) : Command(name) {
     override fun execute(sender: CommandSender, label: String, args: Array<String>): Boolean {
@@ -61,5 +67,91 @@ class CommandExecute(name: String) : Command(name) {
             throw RuntimeException(exception)
         }
         return true
+    }
+
+    override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
+        if (args.size > 1) {
+            return tabComplete0(sender, alias, args, null)
+        }
+        if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
+            return tabComplete0(sender, alias, args, null)
+        }
+        val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
+        val clazz: Class<*> = subCommand.javaClass
+        val methods = clazz.getMethods()
+        if (methods.isEmpty()) {
+            return tabComplete0(sender, alias, args, null)
+        }
+        val methodList: MutableList<Method> = mutableListOf()
+        methods.forEach { method ->
+            if (method.getAnnotation(CommandBody::class.java) == null) {
+                return@forEach
+            }
+            methodList.add(method)
+        }
+        // 排序指令
+        methodList.sortBy { it.getAnnotation(CommandBody::class.java).order }
+        val list: MutableList<String> = mutableListOf()
+        for (method in methodList) {
+            if (!method.isAnnotationPresent(CommandBody::class.java)) {
+                continue
+            }
+            val commandBody = method.getAnnotation(CommandBody::class.java)
+            if (commandBody.hide) {
+                continue
+            }
+            // 判断是否后台
+            if (!commandBody.canConsole && sender is ConsoleCommandSender) {
+                continue
+            }
+            // 判断管理员
+            if (commandBody.needAdmin && !sender.isOp) {
+                continue
+            }
+            // 判断权限
+            if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
+                continue
+            }
+            val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
+            list.add(invokeName)
+        }
+        return list
+    }
+
+    @Throws(IllegalArgumentException::class)
+    fun tabComplete0(
+        sender: CommandSender,
+        alias: String,
+        args: Array<String>,
+        location: Location?
+    ): List<String> {
+        Validate.notNull(sender, "Sender cannot be null")
+        Validate.notNull(args, "Arguments cannot be null")
+        Validate.notNull(alias, "Alias cannot be null")
+        if (args.isEmpty()) {
+            return ImmutableList.of()
+        } else {
+            val lastWord = args[args.size - 1]
+            val senderPlayer = if (sender is Player) sender else null
+            val matchedPlayers: ArrayList<String> = ArrayList<String>()
+            val var9: Iterator<*> = sender.server.onlinePlayers.iterator()
+
+            while (true) {
+                var player: Player
+                var name: String
+                do {
+                    if (!var9.hasNext()) {
+                        Collections.sort(matchedPlayers, java.lang.String.CASE_INSENSITIVE_ORDER)
+                        return matchedPlayers
+                    }
+                    player = var9.next() as Player
+                    name = player.name
+                } while (senderPlayer != null && !senderPlayer.canSee(player))
+
+                if (StringUtil.startsWithIgnoreCase(name, lastWord)) {
+                    matchedPlayers.add(name)
+                }
+            }
+        }
     }
 }
