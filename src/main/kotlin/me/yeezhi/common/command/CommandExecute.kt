@@ -2,6 +2,7 @@ package me.yeezhi.common.command
 
 import com.google.common.collect.ImmutableList
 import org.apache.commons.lang.Validate
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -15,6 +16,9 @@ import java.util.*
 
 class CommandExecute(name: String) : Command(name) {
     override fun execute(sender: CommandSender, label: String, args: Array<String>): Boolean {
+        if (!Bukkit.getPluginManager().isPluginEnabled(bukkitPlugin.name)) {
+            return true
+        }
         if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
             return false
         }
@@ -37,9 +41,6 @@ class CommandExecute(name: String) : Command(name) {
         val invokeMethodName = labelMap[args[0]]
         if (invokeMethodName == null) {
             subCommand.showHelp(sender)
-            return true
-        }
-        if (!bukkitPlugin.isEnabled) {
             return true
         }
         try {
@@ -69,29 +70,24 @@ class CommandExecute(name: String) : Command(name) {
         return true
     }
 
-    override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
-
-        if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
-            return tabComplete0(sender, alias, args, null)
+    override fun tabComplete(sender: CommandSender, label: String, args: Array<String>): List<String> {
+        if (!Bukkit.getPluginManager().isPluginEnabled(bukkitPlugin.name)) {
+            return tabComplete0(sender, label, args, null)
         }
+        if (!CommandLoader.HOOK_SUB_COMMANDS.containsKey(label)) {
+            return tabComplete0(sender, label, args, null)
+        }
+        val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
         if (args.size <= 1) {
-            val subCommand = CommandLoader.HOOK_SUB_COMMANDS[label]!!
             val clazz: Class<*> = subCommand.javaClass
             val methods = clazz.getMethods()
             if (methods.isEmpty()) {
-                return tabComplete0(sender, alias, args, null)
-            }
-            val methodList: MutableList<Method> = mutableListOf()
-            methods.forEach { method ->
-                if (method.getAnnotation(CommandBody::class.java) == null) {
-                    return@forEach
-                }
-                methodList.add(method)
+                return tabComplete0(sender, label, args, null)
             }
             // 排序指令
-            methodList.sortBy { it.getAnnotation(CommandBody::class.java).order }
+            methods.sortBy { it.getAnnotation(CommandBody::class.java)?.order }
             val list: MutableList<String> = mutableListOf()
-            for (method in methodList) {
+            for (method in methods) {
                 if (!method.isAnnotationPresent(CommandBody::class.java)) {
                     continue
                 }
@@ -116,8 +112,7 @@ class CommandExecute(name: String) : Command(name) {
             }
             return list
         }
-
-        return tabComplete0(sender, alias, args, null)
+        return subCommand.tabComplete(sender, args).ifEmpty { tabComplete0(sender, label, args, null) }
 
     }
 

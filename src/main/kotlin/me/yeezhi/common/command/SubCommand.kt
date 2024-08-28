@@ -6,7 +6,6 @@ import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
 import taboolib.module.chat.impl.DefaultComponent
 import taboolib.platform.util.bukkitPlugin
-import java.lang.reflect.Method
 
 open class SubCommand {
     open lateinit var sender: CommandSender
@@ -20,15 +19,9 @@ open class SubCommand {
         if (methods.isEmpty()) {
             return
         }
-        val methodList: MutableList<Method> = mutableListOf()
-        methods.forEach { method ->
-            if (method.getAnnotation(CommandBody::class.java) == null) {
-                return@forEach
-            }
-            methodList.add(method)
-        }
+
         // 排序指令
-        methodList.sortBy { it.getAnnotation(CommandBody::class.java).order }
+        methods.sortBy { it.getAnnotation(CommandBody::class.java)?.order }
 
         sender.spigot().sendMessage(
             *ComponentSerializer.parse(
@@ -42,7 +35,7 @@ open class SubCommand {
         sender.sendMessage("§f ")
         sender.sendMessage("§7 命令: §f/$label§8 [...]")
         sender.sendMessage("§7 参数:")
-        for (method in methodList) {
+        for (method in methods) {
             if (!method.isAnnotationPresent(CommandBody::class.java)) {
                 continue
             }
@@ -83,5 +76,10 @@ open class SubCommand {
                 )
             )
         }
+    }
+
+
+    open fun tabComplete(sender: CommandSender, args: Array<String>): List<String> {
+        return listOf()
     }
 }
