@@ -54,6 +54,25 @@ object ItemUtil {
         return this
     }
 
+    /**
+     * 设置物品Name
+     *
+     * @return 物品
+     */
+
+    fun ItemStack.setName(name: String): ItemStack {
+        if (this.isAir) {
+            return this
+        }
+        if (this.itemMeta == null) {
+            return this
+        }
+        val itemMeta = this.itemMeta
+        itemMeta.displayName = name
+        this.setItemMeta(itemMeta)
+        return this
+    }
+
 
     /**
      * 物品添加附魔

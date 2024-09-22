@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.yeezhi.taboolib"
-version = "1.0.5"
+version = "1.0.6"
 var taboolibVersion = "6.1.2-beta10"
 repositories {
     mavenLocal()
