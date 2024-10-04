@@ -43,19 +43,19 @@ open class SubCommand {
             if (commandBody.hide) {
                 continue
             }
+            val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
             // 判断是否后台
             if (!commandBody.canConsole && sender is ConsoleCommandSender) {
                 continue
             }
             // 判断管理员
-            if (commandBody.needAdmin && !sender.isOp) {
+            if (commandBody.needAdmin && !(sender.isOp || sender.hasPermission("${bukkitPlugin.name}.cmd.$invokeName"))) {
                 continue
             }
             // 判断权限
             if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
                 continue
             }
-            val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
             val msgSb = StringBuilder()
             msgSb.append("  §8- §f").append(invokeName)
             for (arg in commandBody.args) {

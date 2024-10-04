@@ -11,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import taboolib.common.platform.function.submitAsync
 import taboolib.platform.util.bukkitPlugin
-import java.lang.reflect.Method
 import java.util.*
 
 class CommandExecute(name: String) : Command(name) {
@@ -46,12 +45,13 @@ class CommandExecute(name: String) : Command(name) {
         try {
             val invokeMethod = clazz.getMethod(invokeMethodName)
             val commandBody = invokeMethod.getAnnotation(CommandBody::class.java)
+            val invokeName = if (commandBody.cmd == "") invokeMethod.name else commandBody.cmd
             // 判断是否后台
             if (!commandBody.canConsole && sender is ConsoleCommandSender) {
                 return false
             }
             // 判断管理员
-            if (commandBody.needAdmin && !sender.isOp) {
+            if (commandBody.needAdmin && !(sender.isOp || sender.hasPermission("${bukkitPlugin.name}.cmd.$invokeName"))) {
                 return false
             }
             // 判断权限
@@ -95,19 +95,19 @@ class CommandExecute(name: String) : Command(name) {
                 if (commandBody.hide) {
                     continue
                 }
+                val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
                 // 判断是否后台
                 if (!commandBody.canConsole && sender is ConsoleCommandSender) {
                     continue
                 }
                 // 判断管理员
-                if (commandBody.needAdmin && !sender.isOp) {
+                if (commandBody.needAdmin && !(sender.isOp || sender.hasPermission("${bukkitPlugin.name}.cmd.$invokeName"))) {
                     continue
                 }
                 // 判断权限
                 if (commandBody.permission.isNotEmpty() && sender.hasPermission(commandBody.permission)) {
                     continue
                 }
-                val invokeName = if (commandBody.cmd == "") method.name else commandBody.cmd
                 list.add(invokeName)
             }
             return list
