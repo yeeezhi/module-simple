@@ -49,7 +49,7 @@ open class SubCommand {
                 continue
             }
             // 判断管理员
-            if (commandBody.needAdmin && !(sender.isOp || sender.hasPermission("${bukkitPlugin.name}.cmd.$invokeName"))) {
+            if (commandBody.needAdmin && !(sender.isOp || sender.hasPermission("${bukkitPlugin.name.lowercase()}.cmd.$invokeName"))) {
                 continue
             }
             // 判断权限
