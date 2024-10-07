@@ -19,40 +19,43 @@ object CommandLoader : ClassVisitor(0) {
 
 
     override fun visitEnd(clazz: Class<*>, instance: Supplier<*>?) {
-        if (!clazz.isAnnotationPresent(CommandHeader::class.java)) {
-            return
-        }
-
-        val commandHeader = clazz.getAnnotation(CommandHeader::class.java)
-        val subCommand = clazz.newInstance() as SubCommand
-
-        val commandMap: SimpleCommandMap
-        val pm: PluginManager
         try {
-            pm = bukkitPlugin.server.pluginManager
-            val cmdObj = pm.javaClass.getDeclaredField("commandMap")
-            cmdObj.setAccessible(true)
-            commandMap = cmdObj[pm] as SimpleCommandMap
-        } catch (exception: Exception) {
-            throw RuntimeException("出现意外错误！${commandHeader.label}", exception)
-        }
-        val commandMethod: MutableMap<String, String> = HashMap()
-        val methods = clazz.getMethods()
-        for (method in methods) {
-            if (method.isAnnotationPresent(CommandBody::class.java)) {
-                var invokeMethodName = method.name
-                val cmdAnn = method.getAnnotation(CommandBody::class.java)
-                if (cmdAnn.cmd.isNotEmpty()) {
-                    invokeMethodName = cmdAnn.cmd
-                }
-                commandMethod[invokeMethodName] = method.name
+            if (!clazz.isAnnotationPresent(CommandHeader::class.java)) {
+                return
             }
-        }
-        commandHeader.label.forEach {
-            COMMAND_ARGS[it] = commandMethod
-            val cmdObj = CommandExecute(it)
-            HOOK_SUB_COMMANDS[it] = subCommand
-            commandMap.register(bukkitPlugin.description.name, cmdObj)
+
+            val commandHeader = clazz.getAnnotation(CommandHeader::class.java)
+            val subCommand = clazz.newInstance() as SubCommand
+
+            val commandMap: SimpleCommandMap
+            val pm: PluginManager
+            try {
+                pm = bukkitPlugin.server.pluginManager
+                val cmdObj = pm.javaClass.getDeclaredField("commandMap")
+                cmdObj.setAccessible(true)
+                commandMap = cmdObj[pm] as SimpleCommandMap
+            } catch (exception: Exception) {
+                throw RuntimeException("出现意外错误！${commandHeader.label}", exception)
+            }
+            val commandMethod: MutableMap<String, String> = HashMap()
+            val methods = clazz.getMethods()
+            for (method in methods) {
+                if (method.isAnnotationPresent(CommandBody::class.java)) {
+                    var invokeMethodName = method.name
+                    val cmdAnn = method.getAnnotation(CommandBody::class.java)
+                    if (cmdAnn.cmd.isNotEmpty()) {
+                        invokeMethodName = cmdAnn.cmd
+                    }
+                    commandMethod[invokeMethodName] = method.name
+                }
+            }
+            commandHeader.label.forEach {
+                COMMAND_ARGS[it] = commandMethod
+                val cmdObj = CommandExecute(it)
+                HOOK_SUB_COMMANDS[it] = subCommand
+                commandMap.register(bukkitPlugin.description.name, cmdObj)
+            }
+        } catch (_: Exception) {
         }
     }
 
