@@ -1,6 +1,7 @@
 package me.yeezhi.common.util
 
 import org.bukkit.configuration.file.YamlConfiguration
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.ConfigSection
 import taboolib.module.configuration.Configuration
 import taboolib.platform.util.bukkitPlugin
@@ -14,6 +15,16 @@ object ConfigurationUtil {
     fun Configuration.keys(path: String): Set<String> {
         val yaml = YamlConfiguration.loadConfiguration(this.file!!)
         return yaml.getConfigurationSection(path)?.getKeys(false) ?: setOf()
+    }
+
+    /**
+     * 获取keys
+     */
+    fun ConfigurationSection?.keys(deep: Boolean = false): Set<String> {
+        if (this == null) {
+            return setOf()
+        }
+        return this.getKeys(deep)
     }
 
     /**
