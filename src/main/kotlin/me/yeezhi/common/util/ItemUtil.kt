@@ -3,6 +3,7 @@ package me.yeezhi.common.util
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
+import taboolib.module.chat.colored
 import taboolib.platform.util.*
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -27,12 +28,12 @@ object ItemUtil {
      */
 
     fun ItemStack.getLore(): MutableList<String> {
-        if (this.isAir) {
+        if (isAir || itemMeta == null) {
             return mutableListOf()
         }
-        return if (this.itemMeta.lore == null) {
+        return if (itemMeta!!.lore == null) {
             mutableListOf()
-        } else this.itemMeta.lore
+        } else itemMeta!!.lore ?: mutableListOf()
     }
 
     /**
@@ -42,15 +43,11 @@ object ItemUtil {
      */
 
     fun ItemStack.setLore(list: List<String>): ItemStack {
-        if (this.isAir) {
-            return this
+        modifyLore {
+            clear()
+            addAll(list)
+            colored()
         }
-        if (this.itemMeta == null) {
-            return this
-        }
-        val itemMeta = this.itemMeta
-        itemMeta.lore = list
-        this.setItemMeta(itemMeta)
         return this
     }
 
@@ -61,15 +58,13 @@ object ItemUtil {
      */
 
     fun ItemStack.setName(name: String): ItemStack {
-        if (this.isAir) {
+        if (isAir) {
             return this
         }
-        if (this.itemMeta == null) {
+        if (itemMeta == null) {
             return this
         }
-        val itemMeta = this.itemMeta
-        itemMeta.displayName = name
-        this.setItemMeta(itemMeta)
+        itemMeta!!.setDisplayName(name)
         return this
     }
 
@@ -86,14 +81,13 @@ object ItemUtil {
     fun ItemStack.addEnchant(
         enchantment: Enchantment, level: Int, ignoreLevelRestriction: Boolean
     ): ItemStack {
-        if (this.isAir) {
+        if (isAir) {
             return this
         }
-        if (this.itemMeta == null) {
+        if (itemMeta == null) {
             return this
         }
-        val itemMeta = this.itemMeta
-        itemMeta.addEnchant(enchantment, level, ignoreLevelRestriction)
+        itemMeta!!.addEnchant(enchantment, level, ignoreLevelRestriction)
         this.setItemMeta(itemMeta)
         return this
     }

@@ -25,6 +25,9 @@ dependencies {
     compileOnly("io.izzel.taboolib:common-env:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-bukkit-util:$taboolibVersion")
     compileOnly("io.izzel.taboolib:module-bukkit-hook:$taboolibVersion")
+    compileOnly("ink.ptms:nms-all:1.0.0")
+    compileOnly("ink.ptms.core:v12004:12004-minimize:mapped")
+    compileOnly("ink.ptms.core:v12004:12004-minimize:universal")
     compileOnly(fileTree("libs"))
 }
 
