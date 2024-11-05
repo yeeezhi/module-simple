@@ -5,8 +5,8 @@ import org.bukkit.plugin.PluginManager
 import taboolib.common.LifeCycle
 import taboolib.common.inject.ClassVisitor
 import taboolib.common.platform.Awake
+import taboolib.library.reflex.ReflexClass
 import taboolib.platform.util.bukkitPlugin
-import java.util.function.Supplier
 
 @Awake
 object CommandLoader : ClassVisitor(0) {
@@ -18,13 +18,13 @@ object CommandLoader : ClassVisitor(0) {
     }
 
 
-    override fun visitEnd(clazz: Class<*>, instance: Supplier<*>?) {
+    override fun visitEnd(clazz: ReflexClass) {
         try {
-            if (!clazz.isAnnotationPresent(CommandHeader::class.java)) {
+            if (clazz.getAnnotationIfPresent(CommandHeader::class.java) == null) {
                 return
             }
 
-            val commandHeader = clazz.getAnnotation(CommandHeader::class.java)
+            val commandHeader = clazz.toClass().getAnnotation(CommandHeader::class.java)
             val subCommand = clazz.newInstance() as SubCommand
 
             val commandMap: SimpleCommandMap
@@ -38,7 +38,7 @@ object CommandLoader : ClassVisitor(0) {
                 throw RuntimeException("出现意外错误！${commandHeader.label}", exception)
             }
             val commandMethod: MutableMap<String, String> = HashMap()
-            val methods = clazz.getMethods()
+            val methods = clazz.toClass().getMethods()
             for (method in methods) {
                 if (method.isAnnotationPresent(CommandBody::class.java)) {
                     var invokeMethodName = method.name

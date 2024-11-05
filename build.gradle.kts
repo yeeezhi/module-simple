@@ -6,8 +6,8 @@ plugins {
 }
 
 group = "me.yeezhi.taboolib"
-version = "1.0.6"
-var taboolibVersion = "6.1.2-beta10"
+version = "1.0.7"
+var taboolibVersion = "6.2.0-beta33"
 repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/repository/public")
@@ -17,15 +17,17 @@ repositories {
 dependencies {
     compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("io.izzel.taboolib:common:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-chat:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-configuration:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:minecraft-chat:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:basic-configuration:$taboolibVersion")
     compileOnly("io.izzel.taboolib:platform-bukkit:$taboolibVersion")
     compileOnly("io.izzel.taboolib:common-platform-api:$taboolibVersion")
     compileOnly("io.izzel.taboolib:common-util:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:common-reflex:$taboolibVersion")
     compileOnly("io.izzel.taboolib:common-env:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-bukkit-util:$taboolibVersion")
-    compileOnly("io.izzel.taboolib:module-bukkit-hook:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:bukkit-util:$taboolibVersion")
+    compileOnly("io.izzel.taboolib:bukkit-hook:$taboolibVersion")
     compileOnly("ink.ptms:nms-all:1.0.0")
+    compileOnly("net.md_5.bungee:BungeeCord:1")
     compileOnly("ink.ptms.core:v12004:12004-minimize:mapped")
     compileOnly("ink.ptms.core:v12004:12004-minimize:universal")
     compileOnly(fileTree("libs"))
